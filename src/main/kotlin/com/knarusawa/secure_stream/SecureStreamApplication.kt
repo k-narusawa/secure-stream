@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class SecureStreamApplication
 
 fun main(args: Array<String>) {
-	runApplication<SecureStreamApplication>(*args)
+    runApplication<SecureStreamApplication>(*args)
 }
