@@ -1,4 +1,4 @@
-package com.knarusawa.secure_stream.adapter.advice
+package com.knarusawa.secure_stream.adapter.controller.advice
 
 import com.knarusawa.secure_stream.adapter.controller.response.ErrorResponse
 import com.knarusawa.secure_stream.domain.exception.DomainException
