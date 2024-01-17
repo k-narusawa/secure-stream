@@ -1,10 +1,12 @@
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const csrfToken = 'your-csrf-token'; // ここに実際のCSRFトークンを設定します
+  const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,6 +30,7 @@ const LoginPage = () => {
     })
       .then(function (response) {
         console.log(response.data);
+        router.push('/userinfo');
       })
       .catch(function (error) {
         console.log(error.response.data);
