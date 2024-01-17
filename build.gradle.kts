@@ -28,6 +28,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.flywaydb:flyway-core:9.22.3")
     implementation("com.auth0:java-jwt:4.4.0")
+    implementation("sh.ory.hydra:hydra-client:2.1.1")
 
     runtimeOnly("org.flywaydb:flyway-mysql:9.22.3")
     runtimeOnly("mysql:mysql-connector-java:8.0.33")

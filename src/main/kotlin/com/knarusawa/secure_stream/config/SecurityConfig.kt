@@ -1,10 +1,13 @@
 package com.knarusawa.secure_stream.config
 
 import com.knarusawa.secure_stream.adapter.filter.AuthorizeFilter
-import com.knarusawa.secure_stream.application.service.LoginUserDetailsService
+import com.knarusawa.secure_stream.adapter.middleware.AuthenticationFailureHandler
+import com.knarusawa.secure_stream.adapter.middleware.AuthenticationSuccessHandler
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -17,6 +20,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 class SecurityConfig {
+    @Autowired
+    private lateinit var authenticationSuccessHandler: AuthenticationSuccessHandler
+
+    @Autowired
+    private lateinit var authenticationFailureHandler: AuthenticationFailureHandler
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.cors {
@@ -34,16 +43,25 @@ class SecurityConfig {
     }
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
+    fun authenticationFilter(authenticationManager: AuthenticationManager): UsernamePasswordAuthenticationFilter {
+        val filter = UsernamePasswordAuthenticationFilter()
+        filter.setRequiresAuthenticationRequestMatcher {
+            it.method == "POST" && it.requestURI == "/api/v1/login"
+        }
+        filter.setAuthenticationManager(authenticationManager)
+        filter.setAuthenticationSuccessHandler(authenticationSuccessHandler)
+        filter.setAuthenticationFailureHandler(authenticationFailureHandler)
+        return filter
     }
 
     @Bean
-    fun authenticationProvider(loginUserDetailsService: LoginUserDetailsService): DaoAuthenticationProvider {
-        val provider = DaoAuthenticationProvider()
-        provider.setUserDetailsService(loginUserDetailsService)
-        provider.setPasswordEncoder(passwordEncoder())
-        return provider
+    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
+        return authenticationConfiguration.authenticationManager
+    }
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder()
     }
 
     private fun corsConfigurationSource(): CorsConfigurationSource {
