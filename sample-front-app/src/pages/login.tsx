@@ -1,12 +1,30 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const csrfToken = 'your-csrf-token'; // ここに実際のCSRFトークンを設定します
+  const [csrfToken, setCsrfToken] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      await axios('http://localhost:8080/api/v1/login',
+        {
+          withCredentials: true,
+        })
+        .then((response) => {
+          console.log(response.data);
+          setCsrfToken(response.data.csrf_token);
+        }).catch((error) => {
+          console.log(error.response)
+          console.log(error.response.status);
+          console.log(error.response.data);
+        });
+    }
+    fetchCsrfToken();
+  }, [])
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -14,23 +32,18 @@ const LoginPage = () => {
     const data = {
       username: username,
       password: password,
-      csrf_token: csrfToken
+      _csrf: csrfToken
     }
-
-    var params = new URLSearchParams();
-    params.append('username', data.username);
-    params.append('password', data.password);
-    params.append('csrf_token', data.csrf_token);
 
     await axios.post('http://localhost:8080/api/v1/login', data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      params: params
+      withCredentials: true
     })
       .then(function (response) {
         console.log(response.data);
-        router.push('/userinfo');
+        router.push('/userinfo')
       })
       .catch(function (error) {
         console.log(error.response.data);
