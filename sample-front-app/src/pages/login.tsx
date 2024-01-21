@@ -3,9 +3,8 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [csrfToken, setCsrfToken] = useState('');
+  const [username, setUsername] = useState('test@example.com');
+  const [password, setPassword] = useState('!Password0');
   const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -14,14 +13,12 @@ const LoginPage = () => {
     const data = {
       username: username,
       password: password,
-      _csrf: csrfToken
     }
 
     await axios.post('http://localhost:8080/api/v1/login', data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      withCredentials: true
     })
       .then(function (response) {
         console.log(response.data);
@@ -45,7 +42,6 @@ const LoginPage = () => {
           Password:
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
-        <input type="hidden" value={csrfToken} />
         <br />
         <input type="submit" value="Submit" />
       </form>
