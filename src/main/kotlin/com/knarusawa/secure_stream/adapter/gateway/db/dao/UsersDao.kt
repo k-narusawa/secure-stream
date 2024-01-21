@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository
 
 interface UsersDao : CrudRepository<UserRecord, String> {
     fun findByUsername(username: String): UserRecord?
+    fun findByUserId(userId: String): UserRecord?
 }

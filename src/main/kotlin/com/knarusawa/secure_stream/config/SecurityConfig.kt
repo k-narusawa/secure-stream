@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -27,19 +26,26 @@ class SecurityConfig {
     @Autowired
     private lateinit var authenticationFailureHandler: AuthenticationFailureHandler
 
+    @Autowired
+    private lateinit var authenticationConfiguration: AuthenticationConfiguration
+
+    @Autowired
+    private lateinit var authorizeFilter: AuthorizeFilter
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.cors {
             it.configurationSource(this.corsConfigurationSource())
         }
         http.csrf {
-            it.csrfTokenRepository(CookieCsrfTokenRepository())
+            it.disable()
         }
         http.authorizeHttpRequests {
             it.requestMatchers("/api/v1/login").permitAll()
             it.anyRequest().authenticated()
         }
-        http.addFilterBefore(AuthorizeFilter(), UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterAt(authenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 
@@ -56,7 +62,7 @@ class SecurityConfig {
     }
 
     @Bean
-    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
+    fun authenticationManager(): AuthenticationManager {
         return authenticationConfiguration.authenticationManager
     }
 

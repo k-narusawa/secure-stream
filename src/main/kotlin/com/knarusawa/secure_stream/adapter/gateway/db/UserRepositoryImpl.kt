@@ -3,6 +3,7 @@ package com.knarusawa.secure_stream.adapter.gateway.db
 import com.knarusawa.secure_stream.adapter.gateway.db.dao.UsersDao
 import com.knarusawa.secure_stream.adapter.gateway.db.record.UserRecord
 import com.knarusawa.secure_stream.domain.user.User
+import com.knarusawa.secure_stream.domain.user.UserId
 import com.knarusawa.secure_stream.domain.user.UserRepository
 import com.knarusawa.secure_stream.domain.user.Username
 import org.springframework.stereotype.Repository
@@ -24,6 +25,11 @@ class UserRepositoryImpl(
 
     override fun findByUsername(username: Username): User? {
         val user = usersDao.findByUsername(username = username.value())
+        return user?.let { User.from(it) }
+    }
+
+    override fun findByUserId(userId: UserId): User? {
+        val user = usersDao.findByUserId(userId = userId.value())
         return user?.let { User.from(it) }
     }
 }

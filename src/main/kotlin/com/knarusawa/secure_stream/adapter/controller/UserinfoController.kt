@@ -1,6 +1,7 @@
 package com.knarusawa.secure_stream.adapter.controller
 
 import com.knarusawa.secure_stream.adapter.controller.response.UserinfoResponse
+import com.knarusawa.secure_stream.domain.user.User
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,11 +14,12 @@ class UserinfoController {
     @GetMapping
     fun apiV1UserinfoGet(): UserinfoResponse {
         val authentication = SecurityContextHolder.getContext().authentication
-        val username: String = authentication.principal.toString()
+        val user = authentication.principal as? User
+                ?: throw IllegalStateException("Principalが不正")
 
         return UserinfoResponse(
-                userId = "test",
-                username = username
+                userId = user.userId.value(),
+                username = user.username.value()
         )
     }
 }

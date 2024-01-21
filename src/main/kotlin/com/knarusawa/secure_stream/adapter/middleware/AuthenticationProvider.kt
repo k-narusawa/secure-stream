@@ -26,6 +26,6 @@ class AuthenticationProvider(
             throw PasswordNotMatchException(username = username)
         }
 
-        return UsernamePasswordAuthenticationToken(username, password)
+        return UsernamePasswordAuthenticationToken(user, password)
     }
 }
