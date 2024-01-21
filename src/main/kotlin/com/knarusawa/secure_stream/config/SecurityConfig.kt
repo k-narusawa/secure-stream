@@ -79,6 +79,8 @@ class SecurityConfig {
 
         config.addAllowedOrigin("http://127.0.0.1:3000")
         config.addAllowedOrigin("http://localhost:3000")
+        config.addAllowedOrigin("http://127.0.0.1:3001")
+        config.addAllowedOrigin("http://localhost:3001")
 
         val corsSource = UrlBasedCorsConfigurationSource()
         corsSource.registerCorsConfiguration("/**", config)
