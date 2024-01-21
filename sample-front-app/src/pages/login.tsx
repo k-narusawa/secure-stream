@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -7,10 +8,12 @@ const LoginPage = () => {
   const [password, setPassword] = useState('!Password0');
   const [csrfToken, setCsrfToken] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const loginChallenge = searchParams.get("login_challenge");
 
   useEffect(() => {
     const fetchCsrfToken = async () => {
-      await axios('http://localhost:8080/api/v1/login',
+      await axios('http://127.0.0.1:8080/api/v1/login',
         {
           withCredentials: true,
         })
@@ -32,10 +35,11 @@ const LoginPage = () => {
     const data = {
       username: username,
       password: password,
-      _csrf: csrfToken
+      _csrf: csrfToken,
+      login_challenge: loginChallenge
     }
 
-    await axios.post('http://localhost:8080/api/v1/login', data, {
+    await axios.post('http://127.0.0.1:8080/api/v1/login', data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

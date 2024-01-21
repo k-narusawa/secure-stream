@@ -1,5 +1,6 @@
 package com.knarusawa.secure_stream.config
 
+import com.knarusawa.secure_stream.adapter.filter.AuthenticationFilter
 import com.knarusawa.secure_stream.adapter.filter.AuthorizeFilter
 import com.knarusawa.secure_stream.adapter.middleware.AuthenticationFailureHandler
 import com.knarusawa.secure_stream.adapter.middleware.AuthenticationSuccessHandler
@@ -52,7 +53,7 @@ class SecurityConfig {
 
     @Bean
     fun authenticationFilter(): UsernamePasswordAuthenticationFilter {
-        val filter = UsernamePasswordAuthenticationFilter()
+        val filter = AuthenticationFilter(authenticationManager())
         filter.setRequiresAuthenticationRequestMatcher {
             it.method == "POST" && it.requestURI == "/api/v1/login"
         }

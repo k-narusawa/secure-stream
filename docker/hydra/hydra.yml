@@ -7,6 +7,8 @@ serve:
       allowed_origins:
         - http://127.0.0.1:8080
         - http://localhost:8080
+        - http://127.0.0.1:3001
+        - http://localhost:3001
       allowed_methods:
         - POST
         - GET
@@ -15,7 +17,7 @@ serve:
         - DELETE
       allowed_headers:
         - Authorization
-        - Cookie
+        - Set-Cookie
         - Content-Type
         - X-Session-Token
       exposed_headers:
@@ -28,6 +30,8 @@ serve:
       allowed_origins:
         - http://127.0.0.1:8080
         - http://localhost:8080
+        - http://127.0.0.1:3001
+        - http://localhost:3001
       allowed_methods:
         - POST
         - GET
@@ -36,7 +40,7 @@ serve:
         - DELETE
       allowed_headers:
         - Authorization
-        - Cookie
+        - Set-Cookie
         - Content-Type
         - X-Session-Token
       exposed_headers:

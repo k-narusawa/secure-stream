@@ -8,7 +8,7 @@ const UserinfoPage = () => {
   
   useEffect(() => {
     const fetchUserInfo = async () => {
-      await axios('http://localhost:8080/api/v1/userinfo',
+      await axios('http://127.0.0.1:8080/api/v1/userinfo',
       {
         withCredentials: true,
       })
