@@ -8,24 +8,6 @@ const LoginPage = () => {
   const [csrfToken, setCsrfToken] = useState('');
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchCsrfToken = async () => {
-      await axios('http://localhost:8080/api/v1/login',
-        {
-          withCredentials: true,
-        })
-        .then((response) => {
-          console.log(response.data);
-          setCsrfToken(response.data.csrf_token);
-        }).catch((error) => {
-          console.log(error.response)
-          console.log(error.response.status);
-          console.log(error.response.data);
-        });
-    }
-    fetchCsrfToken();
-  }, [])
-
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

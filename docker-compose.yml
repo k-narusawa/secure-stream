@@ -1,34 +1,76 @@
-version: '3'
-
+version: "3.7"
 services:
+  hydra:
+    image: oryd/hydra:v2.2.0-rc.3
+    ports:
+      - "44444:4444" # Public port
+      - "4445:4445" # Admin port
+      - "5556:5555" # Port for hydra token user
+    command: serve -c /etc/config/hydra/hydra.yml all --dev
+    volumes:
+      - type: bind
+        source: ./docker/hydra
+        target: /etc/config/hydra
+    environment:
+      - DSN=mysql://root:root@tcp(hydra-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
+      # env_file:
+      #   - ./docker/hydra.env
+    restart: unless-stopped
+    depends_on:
+      - hydra-migrate
+    networks:
+      - intranet
+
+  hydra-migrate:
+    image: oryd/hydra:v2.2.0-rc.3
+    environment:
+      - DSN=mysql://root:root@tcp(hydra-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
+    command: migrate -c /etc/config/hydra/hydra.yml sql -e --yes
+    volumes:
+      - type: bind
+        source: ./docker/hydra
+        target: /etc/config/hydra
+    restart: on-failure
+    depends_on:
+      - mysql
+    networks:
+      - intranet
+
   mysql:
     image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: secure_stream
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: docker
-      TZ: 'Asia/Tokyo'
-    volumes:
-      - mysql:/var/lib/mysql
     ports:
       - "3306:3306"
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-
-  mysql-test:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: secure_stream
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: docker
-      TZ: 'Asia/Tokyo'
     volumes:
-      - mysql-test:/var/lib/mysql
+      - type: volume
+        source: mysql
+        target: /var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=docker
+      - MYSQL_PASSWORD=docker
+      - MYSQL_DATABASE=secure_stream
+    networks:
+      - intranet
+
+  hydra-mysql:
+    image: mysql:8.0
     ports:
       - "3307:3306"
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - type: volume
+        source: hydra-mysql
+        target: /var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=docker
+      - MYSQL_PASSWORD=docker
+    networks:
+      - intranet
+
+networks:
+  intranet:
 
 volumes:
+  hydra:
   mysql:
-  mysql-test:
+  hydra-mysql:
