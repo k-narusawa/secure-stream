@@ -1,10 +1,9 @@
 package com.knarusawa.secure_stream.adapter.filter
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
-import com.knarusawa.secure_stream.domain.user.UserId
+import com.knarusawa.secure_stream.domain.LoginUserDetails
 import com.knarusawa.secure_stream.domain.user.UserRepository
 import com.knarusawa.secure_stream.util.logger
+import com.sun.jdi.request.InvalidRequestStateException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -23,20 +22,10 @@ class AuthorizeFilter(
     private val log = logger()
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         if (!matcher.matches(request)) {
-            val bearerToken = request.getHeader("Authorization")
+            val user = request.session.getAttribute("user") as? LoginUserDetails
+                    ?: throw InvalidRequestStateException("想定外の認証エラー")
 
-            if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
-                filterChain.doFilter(request, response);
-                return
-            }
-
-            val decodedJWT = JWT.require(Algorithm.HMAC256("secret")).build().verify(bearerToken.substring(7))
-            val userId = decodedJWT.subject
-
-            val user = userRepository.findByUserId(userId = UserId.from(userId))
-                    ?: throw IllegalStateException("Userが見つかりません")
-
-            log.info("username: ${user.username}")
+            log.info("user_id: ${user.userId}")
             SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(user, null, ArrayList())
         }
 

@@ -5,7 +5,26 @@ import React, { useEffect, useState } from 'react';
 const LoginPage = () => {
   const [username, setUsername] = useState('test@example.com');
   const [password, setPassword] = useState('!Password0');
+  const [csrfToken, setCsrfToken] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      await axios('http://localhost:8080/api/v1/login',
+        {
+          withCredentials: true,
+        })
+        .then((response) => {
+          console.log(response.data);
+          setCsrfToken(response.data.csrf_token);
+        }).catch((error) => {
+          console.log(error.response)
+          console.log(error.response.status);
+          console.log(error.response.data);
+        });
+    }
+    fetchCsrfToken();
+  }, [])
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -13,12 +32,14 @@ const LoginPage = () => {
     const data = {
       username: username,
       password: password,
+      _csrf: csrfToken
     }
 
     await axios.post('http://localhost:8080/api/v1/login', data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
+      withCredentials: true
     })
       .then(function (response) {
         console.log(response.data);
@@ -42,6 +63,7 @@ const LoginPage = () => {
           Password:
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
+        <input type="hidden" value={csrfToken} />
         <br />
         <input type="submit" value="Submit" />
       </form>
