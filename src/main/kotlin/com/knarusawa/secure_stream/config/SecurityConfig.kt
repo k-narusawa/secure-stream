@@ -46,17 +46,17 @@ class SecurityConfig {
             it.anyRequest().authenticated()
         }
         http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter::class.java)
-        http.addFilterAt(authenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterAt(authenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }
 
     @Bean
-    fun authenticationFilter(authenticationManager: AuthenticationManager): UsernamePasswordAuthenticationFilter {
+    fun authenticationFilter(): UsernamePasswordAuthenticationFilter {
         val filter = UsernamePasswordAuthenticationFilter()
         filter.setRequiresAuthenticationRequestMatcher {
             it.method == "POST" && it.requestURI == "/api/v1/login"
         }
-        filter.setAuthenticationManager(authenticationManager)
+        filter.setAuthenticationManager(authenticationManager())
         filter.setAuthenticationSuccessHandler(authenticationSuccessHandler)
         filter.setAuthenticationFailureHandler(authenticationFailureHandler)
         return filter
