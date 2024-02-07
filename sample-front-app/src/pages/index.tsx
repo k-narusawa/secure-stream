@@ -1,14 +1,12 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import Link from 'next/link'
-
-const inter = Inter({ subsets: ['latin'] })
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  return (
-    <>
-      <Link href="/login">login</Link>
-      <Link href="/login">userinfo</Link>
-    </>
-  )
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/userinfo");
+  }, [router]);
+
+  return null;
 }
