@@ -1,5 +1,5 @@
 const Button = ({ children, variant = 'primary', ...props }: { children: React.ReactNode, variant?: string, [key: string]: any }) => {
-  const baseStyle = 'py-2 px-4 font-semibold rounded-lg shadow-md';
+  const baseStyle = 'w-full py-2 px-4 font-semibold rounded-lg shadow-md';
   let variantStyle = '';
   if (variant === 'primary') {
     variantStyle = 'text-white bg-blue-500 hover:bg-blue-700';
