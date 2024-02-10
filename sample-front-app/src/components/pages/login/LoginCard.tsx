@@ -1,23 +1,20 @@
 import Button from "@/components/components/Button/Button";
 import Input from "@/components/components/Input/Input";
+import ErrorAlert from "@/components/pages/login/ErrorAlert";
 import { useForm } from "react-hook-form";
 
 type LoginCardProps = {
   username: string;
   password: string;
   csrfToken: string;
+  error: string | undefined;
   setUsername: (username: string) => void;
   setPassword: (password: string) => void;
-  onLogin: (e: React.FormEvent<HTMLFormElement>) => void;
-};
-
-type Inputs = {
-  username: string;
-  password: string;
+  onLogin: (data: any) => void;
 };
 
 const LoginCard = ({ ...props }: LoginCardProps) => {
-  const { handleSubmit, control, formState } = useForm<Inputs>({
+  const { handleSubmit, control, formState } = useForm<LoginFormInputs>({
     defaultValues: async () => {
       return {
         username: props.username,
@@ -33,7 +30,12 @@ const LoginCard = ({ ...props }: LoginCardProps) => {
         <div className="text-xl font-medium text-gray-900 text-center">
           Login
         </div>
-        <form onSubmit={props.onLogin}>
+        {props.error && (
+          <div className="mt-10"> 
+            <ErrorAlert error={props.error} />
+          </div>
+        )}
+        <form onSubmit={handleSubmit(props.onLogin)}>
           <div className="flex flex-col mt-5">
             <Input
               label="Username"
