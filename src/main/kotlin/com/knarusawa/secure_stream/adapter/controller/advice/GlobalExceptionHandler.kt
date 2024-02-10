@@ -1,6 +1,7 @@
 package com.knarusawa.secure_stream.adapter.controller.advice
 
 import com.knarusawa.secure_stream.adapter.controller.response.ErrorResponse
+import com.knarusawa.secure_stream.adapter.exception.AuthenticationFailedException
 import com.knarusawa.secure_stream.domain.exception.DomainException
 import com.knarusawa.secure_stream.util.logger
 import jakarta.servlet.http.HttpServletRequest
@@ -14,6 +15,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 class GlobalExceptionHandler {
     private val log = logger()
+
+    @ExceptionHandler(AuthenticationFailedException::class)
+    fun handleAuthenticationFailedException(
+            ex: AuthenticationFailedException,
+            request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        log.warn("message: ${ex.message}, cause: ${ex.cause}, ex: $ex")
+        return ResponseEntity(
+                ErrorResponse.of(
+                        exception = ex,
+                        errorMessage = ex.message,
+                        logLevel = LogLevel.WARN
+                ),
+                HttpStatus.UNAUTHORIZED
+        )
+    }
 
     @ExceptionHandler(UsernameNotFoundException::class)
     fun handleUsernameNotFoundException(

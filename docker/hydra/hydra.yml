@@ -1,37 +1,13 @@
+dev: true
+
 serve:
-  cookies:
-    same_site_mode: Lax
-  admin:
-    cors:
-      enabled: true
-      allowed_origins:
-        - http://127.0.0.1:8080
-        - http://localhost:8080
-        - http://127.0.0.1:3001
-        - http://localhost:3001
-      allowed_methods:
-        - POST
-        - GET
-        - PUT
-        - PATCH
-        - DELETE
-      allowed_headers:
-        - Authorization
-        - Set-Cookie
-        - Content-Type
-        - X-Session-Token
-      exposed_headers:
-        - Content-Type
-        - Set-Cookie
-      allow_credentials: true
   public:
     cors:
       enabled: true
       allowed_origins:
-        - http://127.0.0.1:8080
-        - http://localhost:8080
-        - http://127.0.0.1:3001
         - http://localhost:3001
+        - http://localhost:8080
+        - http://localhost:3000
       allowed_methods:
         - POST
         - GET
@@ -47,6 +23,30 @@ serve:
         - Content-Type
         - Set-Cookie
       allow_credentials: true
+  admin:
+    cors:
+      enabled: true
+      allowed_origins:
+        - http://localhost:3001
+        - http://localhost:8080
+        - http://localhost:3000
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Set-Cookie
+        - Content-Type
+        - X-Session-Token
+      exposed_headers:
+        - Content-Type
+        - Set-Cookie
+      allow_credentials: true
+  cookies:
+    same_site_mode: Lax
 
 urls:
   self:

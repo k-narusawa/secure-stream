@@ -1,6 +1,6 @@
 package com.knarusawa.secure_stream.adapter.middleware
 
-import com.knarusawa.secure_stream.adapter.exception.PasswordNotMatchException
+import com.knarusawa.secure_stream.adapter.exception.AuthenticationFailedException
 import com.knarusawa.secure_stream.application.service.loginFailure.LoginFailureInputData
 import com.knarusawa.secure_stream.application.service.loginFailure.LoginFailureService
 import com.knarusawa.secure_stream.util.logger
@@ -20,7 +20,7 @@ class AuthenticationFailureHandler(
         val userAgent = request?.getHeader("User-Agent")
 
         when (exception) {
-            is PasswordNotMatchException -> {
+            is AuthenticationFailedException -> {
                 log.warn("認証失敗 username: ${exception.username}")
                 loginFailureService.execute(
                         inputData = LoginFailureInputData(

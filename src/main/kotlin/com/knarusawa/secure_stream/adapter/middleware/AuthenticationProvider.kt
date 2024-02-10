@@ -1,6 +1,6 @@
 package com.knarusawa.secure_stream.adapter.middleware
 
-import com.knarusawa.secure_stream.adapter.exception.PasswordNotMatchException
+import com.knarusawa.secure_stream.adapter.exception.AuthenticationFailedException
 import com.knarusawa.secure_stream.application.service.LoginUserDetailsService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -23,7 +23,7 @@ class AuthenticationProvider(
         val user = loginUserDetailsService.loadUserByUsername(username)
 
         if (!passwordEncoder.matches(password, user.password)) {
-            throw PasswordNotMatchException(username = username)
+            throw AuthenticationFailedException(username = username, message = "認証に失敗しました")
         }
 
         return UsernamePasswordAuthenticationToken(user, password)

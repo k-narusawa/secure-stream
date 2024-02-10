@@ -43,7 +43,7 @@ class SecurityConfig {
             it.csrfTokenRepository(CookieCsrfTokenRepository())
         }
         http.authorizeHttpRequests {
-            it.requestMatchers("/api/v1/login").permitAll()
+            it.requestMatchers("/api/v1/csrf", "/api/v1/login").permitAll()
             it.anyRequest().authenticated()
         }
         http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter::class.java)

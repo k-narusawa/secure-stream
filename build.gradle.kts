@@ -21,6 +21,7 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -28,7 +29,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.flywaydb:flyway-core:9.22.3")
     implementation("com.auth0:java-jwt:4.4.0")
-    implementation("sh.ory.hydra:hydra-client:2.1.1")
+    implementation("sh.ory.hydra:hydra-client:2.2.0-rc.3")
 
     runtimeOnly("org.flywaydb:flyway-mysql:9.22.3")
     runtimeOnly("mysql:mysql-connector-java:8.0.33")

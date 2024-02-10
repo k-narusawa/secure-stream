@@ -3,7 +3,6 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { set } from "react-hook-form";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("test@example.com");
@@ -16,18 +15,27 @@ const LoginPage = () => {
   const apiHost = process.env.NEXT_PUBLIC_SECURE_STREAM_HOST;
 
   useEffect(() => {
+    let ignore = false;
+
     const fetchCsrfToken = async () => {
-      await axios(`${apiHost}/api/v1/login`, {
-        withCredentials: true,
-      })
-        .then((response) => {
-          setCsrfToken(response.data.csrf_token);
+      if (!ignore) {
+        await axios(`${apiHost}/api/v1/csrf`, {
+          withCredentials: true,
         })
-        .catch(() => {
-          setError("Internal Server Error");
-        });
+          .then((response) => {
+            setCsrfToken(response.data.csrf_token);
+          })
+          .catch(() => {
+            setError("Internal Server Error");
+          });
+      }
     };
+
     fetchCsrfToken();
+
+    return () => {
+      ignore = true;
+    }
   }, [apiHost]);
 
   const onSubmit = async (input: LoginFormInputs) => {
@@ -38,22 +46,31 @@ const LoginPage = () => {
       login_challenge: loginChallenge,
     };
 
-    await axios
+    const redirectTo = await axios
       .post(`${apiHost}/api/v1/login`, data, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         withCredentials: true,
       })
-      .then(() => {
-        router.push("/userinfo");
+      .then((response) => {
+        // router.push("/userinfo");
+        return response.data.redirect_to;
       })
       .catch((error) => {
         if (error.response.status === 401) {
           setError("Unauthorized");
         }
       });
+
+      await axios.get(redirectTo, {
+        withCredentials: true,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
   };
+
 
   return (
     <div className="pt-10">
