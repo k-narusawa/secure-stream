@@ -29,19 +29,13 @@ class ConsentController(
         val res = oAuth2Api.getOAuth2ConsentRequest(consentChallenge)
         val scopes = res.requestedScope?.toList()
 
-        log.info(res.toString())
         if (scopes == null || res.skip == true) {
             val consentRequest = AcceptOAuth2ConsentRequest().apply {
                 grantScope = res.requestedScope
                 grantAccessTokenAudience = res.requestedAccessTokenAudience
             }
 
-            val res = oAuth2Api.acceptOAuth2ConsentRequest(
-                    consentChallenge,hy
-                    consentRequest
-            )
-
-            log.info(res.toString())
+            val res = oAuth2Api.acceptOAuth2ConsentRequest(consentChallenge, consentRequest)
 
             return ApiV1ConsentGetResponse(
                     challenge = consentChallenge,
@@ -76,12 +70,7 @@ class ConsentController(
             rememberFor = 3600
         }
 
-        val res = oAuth2Api.acceptOAuth2ConsentRequest(
-                challenge,
-                consentRequest
-        )
-
-        log.info(res.toString())
+        val res = oAuth2Api.acceptOAuth2ConsentRequest(challenge, consentRequest)
 
         return ApiV1ConsentPostResponse(res.redirectTo)
     }
