@@ -10,13 +10,6 @@ spring:
     enabled: true
     locations: "classpath:db/migrate"
 
-
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
-
 env:
   cors:
     allowed-origin: http://localhost:3000,http://localhost:3001
