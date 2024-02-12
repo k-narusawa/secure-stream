@@ -9,7 +9,12 @@ type ConsentCardProps = {
 };
 
 const ConsentCard = ({ ...props }: ConsentCardProps) => {
-  const { register, handleSubmit } = useForm<ConsentFormInputs>();
+  const { register, handleSubmit, watch, formState: {errors, isValid} } = useForm<ConsentFormInputs>({
+    mode: "onChange"
+  });
+
+  const checkedValues = watch("scopes");
+  const isAllChecked = checkedValues.length === props.scopes.length;
   
   return (
     <Card>
@@ -24,7 +29,9 @@ const ConsentCard = ({ ...props }: ConsentCardProps) => {
                   type="checkbox" 
                   value={scope.name}
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  { ...register("scopes") }
+                  { ...register("scopes", {
+                    required: "You must accept."
+                  })}
                 >
                 </input>
               </div>
@@ -39,8 +46,13 @@ const ConsentCard = ({ ...props }: ConsentCardProps) => {
             </div>
           </div>
         ))}
+        {errors.scopes && 
+          <p className="text-xs text-red-500 dark:text-red-400">
+            {errors.scopes.message}
+          </p>
+        }
         <div className="mt-5">
-          <Button type="submit">I accept</Button>
+          <Button type="submit" disabled={!isAllChecked}>I accept</Button>
         </div>
       </form>
     </Card>
