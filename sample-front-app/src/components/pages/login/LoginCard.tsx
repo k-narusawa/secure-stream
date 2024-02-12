@@ -10,7 +10,7 @@ type LoginCardProps = {
   error: string | undefined;
   setUsername: (username: string) => void;
   setPassword: (password: string) => void;
-  onLogin: (data: any) => void;
+  onLogin: (data: LoginFormInputs) => void;
 };
 
 const LoginCard = ({ ...props }: LoginCardProps) => {

@@ -38,7 +38,7 @@ const LoginPage = () => {
     }
   }, [apiHost]);
 
-  const onSubmit = async (input: LoginFormInputs) => {
+  const onLogin = async (input: LoginFormInputs) => {
     const data = {
       username: input.username,
       password: input.password,
@@ -54,7 +54,6 @@ const LoginPage = () => {
         withCredentials: true,
       })
       .then((response) => {
-        // router.push("/userinfo");
         return response.data.redirect_to;
       })
       .catch((error) => {
@@ -63,12 +62,7 @@ const LoginPage = () => {
         }
       });
 
-      await axios.get(redirectTo, {
-        withCredentials: true,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
+      await router.push(redirectTo);
   };
 
 
@@ -81,7 +75,7 @@ const LoginPage = () => {
         error={error}
         setUsername={setUsername}
         setPassword={setPassword}
-        onLogin={onSubmit}
+        onLogin={onLogin}
       />
     </div>
   );

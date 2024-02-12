@@ -6,7 +6,6 @@ serve:
       enabled: true
       allowed_origins:
         - http://localhost:3001
-        - http://localhost:8080
         - http://localhost:3000
       allowed_methods:
         - POST
@@ -27,8 +26,6 @@ serve:
     cors:
       enabled: true
       allowed_origins:
-        - http://localhost:3001
-        - http://localhost:8080
         - http://localhost:3000
       allowed_methods:
         - POST

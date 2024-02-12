@@ -37,12 +37,12 @@ class AuthenticationSuccessHandler(
         if (loginChallenge != null) {
             val req = AcceptOAuth2LoginRequest().subject(user.username)
             val res = oAuth2Api.acceptOAuth2LoginRequest(loginChallenge, req)
+
             response?.setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             response?.writer?.println(
                     "{ \"redirect_to\": \"${res.redirectTo}\"}"
             )
-            println(res)
-//            response?.sendRedirect(res.redirectTo)
+            
             return
         }
 
