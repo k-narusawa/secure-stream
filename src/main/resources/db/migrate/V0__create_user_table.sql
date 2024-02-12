@@ -6,6 +6,8 @@ CREATE TABLE users
     is_account_lock    BOOLEAN      NOT NULL,
     failed_attempts    INT          NOT NULL,
     is_disabled        BOOLEAN      NOT NULL,
-    created_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_at         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX idx_username ON users(username);

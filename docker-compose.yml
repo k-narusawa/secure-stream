@@ -33,23 +33,23 @@ services:
         target: /etc/config/hydra
     restart: on-failure
     depends_on:
-      - mysql
+      - hydra-mysql
     networks:
       - intranet
 
-  mysql:
-    image: mysql:8.0
+  postgresd:
+    image: postgres:15.4
+    restart: on-failure
     ports:
-      - "3306:3306"
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=secure_stream
     volumes:
       - type: volume
-        source: mysql
+        source: postgres
         target: /var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=docker
-      - MYSQL_PASSWORD=docker
-      - MYSQL_DATABASE=secure_stream
     networks:
       - intranet
 
@@ -73,5 +73,5 @@ networks:
 
 volumes:
   hydra:
-  mysql:
+  postgres:
   hydra-mysql:
