@@ -19,7 +19,9 @@ class AuthenticationSuccessHandler(
         private val loginCompleteService: LoginCompleteService,
         private val oAuth2Api: OAuth2Api,
 ) : org.springframework.security.web.authentication.AuthenticationSuccessHandler {
-    private val log = logger()
+    companion object {
+        private val log = logger()
+    }
 
     override fun onAuthenticationSuccess(request: HttpServletRequest?, response: HttpServletResponse?, authentication: Authentication?) {
         val user = authentication?.principal as LoginUserDetails

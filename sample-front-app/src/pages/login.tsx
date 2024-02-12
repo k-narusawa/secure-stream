@@ -17,12 +17,18 @@ const LoginPage = () => {
   useEffect(() => {
     let ignore = false;
 
-    const fetchCsrfToken = async () => {
+    const loginRequest = async () => {
       if (!ignore) {
-        await axios(`${apiHost}/api/v1/csrf`, {
+        await axios(`${apiHost}/api/v1/login`, {
           withCredentials: true,
+          params:{
+            login_challenge: loginChallenge
+          }
         })
           .then((response) => {
+            if(response.data.redirect_to){
+              router.push(response.data.redirect_to)
+            }
             setCsrfToken(response.data.csrf_token);
           })
           .catch(() => {
@@ -31,12 +37,12 @@ const LoginPage = () => {
       }
     };
 
-    fetchCsrfToken();
+    loginRequest();
 
     return () => {
       ignore = true;
     }
-  }, [apiHost]);
+  }, [apiHost, router]);
 
   const onLogin = async (input: LoginFormInputs) => {
     const data = {

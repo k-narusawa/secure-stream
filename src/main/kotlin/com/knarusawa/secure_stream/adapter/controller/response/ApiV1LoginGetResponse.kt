@@ -4,5 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ApiV1LoginGetResponse(
         @JsonProperty("csrf_token")
-        val csrfToken: String
+        val csrfToken: String,
+        @JsonProperty("redirect_to")
+        val redirectTo: String?,
 )
