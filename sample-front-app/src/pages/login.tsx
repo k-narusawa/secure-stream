@@ -42,7 +42,7 @@ const LoginPage = () => {
     return () => {
       ignore = true;
     }
-  }, [apiHost, router]);
+  }, [apiHost, loginChallenge, router]);
 
   const onLogin = async (input: LoginFormInputs) => {
     const data = {

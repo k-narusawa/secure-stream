@@ -14,7 +14,7 @@ type LoginCardProps = {
 };
 
 const LoginCard = ({ ...props }: LoginCardProps) => {
-  const { handleSubmit, control, formState } = useForm<LoginFormInputs>({
+  const { handleSubmit, control, formState: {isValid, isSubmitting} } = useForm<LoginFormInputs>({
     defaultValues: async () => {
       return {
         username: props.username,
@@ -61,7 +61,7 @@ const LoginCard = ({ ...props }: LoginCardProps) => {
           </div>
           <input type="hidden" value={props.csrfToken} />
           <div className="mt-5 text-center">
-            <Button type="submit">Login</Button>
+            <Button type="submit" disabled={!isValid || isSubmitting}>Login</Button>
           </div>
         </form>
       </div>
