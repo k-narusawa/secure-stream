@@ -14,7 +14,7 @@ const ConsentCard = ({ ...props }: ConsentCardProps) => {
   });
 
   const checkedValues = watch("scopes");
-  const isAllChecked = checkedValues.length === props.scopes.length;
+  const isAllChecked = checkedValues && checkedValues.length === props.scopes.length;
   
   return (
     <Card>

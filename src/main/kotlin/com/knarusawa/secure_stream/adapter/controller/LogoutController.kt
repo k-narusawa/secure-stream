@@ -7,10 +7,13 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import sh.ory.hydra.api.OAuth2Api
 
 @RestController
 @RequestMapping("/api/v1/logout")
-class LogoutController {
+class LogoutController(
+        private val oAuth2Api: OAuth2Api
+) {
     @PostMapping
     fun apiV1LogoutPost(request: HttpServletRequest, response: HttpServletResponse) {
         val authentication = SecurityContextHolder.getContext().authentication

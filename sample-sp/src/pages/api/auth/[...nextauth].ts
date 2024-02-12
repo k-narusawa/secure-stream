@@ -29,7 +29,20 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: { 
-    async redirect({ url, baseUrl }) { return baseUrl }, 
+    async redirect({ url, baseUrl }) { 
+      if (url.startsWith(baseUrl)) return url;
+
+      console.log('redirect', url, baseUrl);
+
+      if (url === 'signOut') {
+        const logoutEndpointUrl = "http://localhost:44444/oauth2/auth/logout";
+        return `${logoutEndpointUrl}`;
+      }
+      // Allows relative callback URLs
+      if (url.startsWith('/')) return new URL(url, baseUrl).toString();
+      // Redirect to root when the redirect URL is still an external domain
+      return baseUrl;
+    }, 
 
     async jwt({ token, user, account }) {
       token.accessToken ??= account?.access_token;

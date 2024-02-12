@@ -21,7 +21,7 @@ serve:
       exposed_headers:
         - Content-Type
         - Set-Cookie
-      allow_credentials: truek
+      allow_credentials: true
   admin:
     cors:
       enabled: true

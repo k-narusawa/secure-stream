@@ -11,10 +11,10 @@ const ConsentPage = () => {
   const [ scopes, setScopes ] = useState<Scope[]>([]);
   const [ csrfToken, setCsrfToken ] = useState("");
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect_to");
+  
   const consentChallenge = searchParams.get("consent_challenge");
   const router = useRouter();
-  
+
   useEffect(() => {
     const fetchConsent = async () => {
       if(consentChallenge){
@@ -23,6 +23,9 @@ const ConsentPage = () => {
         })
           .then((response) => {
             console.log(response.data);
+            if(response.data.redirect_to){
+              router.push(response.data.redirect_to)
+            }
             setChallenge(response.data.challenge);
             setScopes(response.data.scopes);
             setCsrfToken(response.data.csrf_token);
@@ -36,7 +39,7 @@ const ConsentPage = () => {
     }
 
     fetchConsent();
-  }, [apiHost, consentChallenge, redirectTo]);
+  }, [apiHost, consentChallenge, router]);
 
   const onAccept = async (data: ConsentFormInputs) => {
     console.log(data);

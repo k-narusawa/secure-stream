@@ -1,10 +1,15 @@
 import { Inter } from 'next/font/google'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import axios from 'axios'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const { data: session } = useSession()
+
+  const onLogout = async() => {
+    signOut()
+  }
   
   if(session) {
     return (
@@ -14,6 +19,13 @@ export default function Home() {
         <div>refresh_token: {session.refreshToken}</div>
         <div>id_token: {session.idToken}</div>
         <div>expires_at: {session.expiresAt}</div>
+        <button 
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+          // onClick={() => signOut({ redirect: true, callbackUrl: '/api/auth/logout' })}
+          onClick={onLogout}
+          >
+          ログアウト
+        </button>
       </>
     )
   }

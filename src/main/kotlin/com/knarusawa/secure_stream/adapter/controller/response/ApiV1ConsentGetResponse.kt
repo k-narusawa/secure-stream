@@ -4,15 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ApiV1ConsentGetResponse(
         @JsonProperty("challenge")
-        val challenge: String,
+        val challenge: String?,
         @JsonProperty("scopes")
-        val scopes: List<Scope>,
+        val scopes: List<Scope>?,
         @JsonProperty("csrf_token")
-        val csrfToken: String,
+        val csrfToken: String?,
+        @JsonProperty("redirect_to")
+        val redirectTo: String?,
 ) {
     data class Scope(
             @JsonProperty("name")
-            val name: String,
+            val name: String?,
             @JsonProperty("required")
             val required: Boolean,
             @JsonProperty("is_checked")
