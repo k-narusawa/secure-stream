@@ -32,8 +32,7 @@ dependencies {
     implementation("sh.ory.hydra:hydra-client:2.2.0-rc.3")
 
     runtimeOnly("org.flywaydb:flyway-mysql:9.22.3")
-    runtimeOnly("mysql:mysql-connector-java:8.0.33")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("com.mysql:mysql-connector-j:8.0.33")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
