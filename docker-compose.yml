@@ -13,7 +13,7 @@ services:
         target: /etc/config/hydra
     environment:
       - CORS_DEBUG=true
-      - DSN=mysql://root:root@tcp(hydra-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
+      - DSN=postgres://root:root@hydra-postgres:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
       # env_file:
       #   - ./docker/hydra.env
     restart: unless-stopped
@@ -25,7 +25,7 @@ services:
   hydra-migrate:
     image: oryd/hydra:v2.2.0
     environment:
-      - DSN=mysql://root:root@tcp(hydra-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
+      - DSN=postgres://root:root@hydra-postgres:5432/hydra?sslmode=disable&max_conns=20&max_idle_conns=4
     command: migrate -c /etc/config/hydra/hydra.yml sql -e --yes
     volumes:
       - type: bind
@@ -33,15 +33,15 @@ services:
         target: /etc/config/hydra
     restart: on-failure
     depends_on:
-      - hydra-mysql
+      - hydra-postgres
     networks:
       - intranet
 
-  postgresd:
+  postgres:
     image: postgres:15.4
     restart: on-failure
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -49,22 +49,23 @@ services:
     volumes:
       - type: volume
         source: postgres
-        target: /var/lib/mysql
+        target: /var/lib/postgres
     networks:
       - intranet
 
-  hydra-mysql:
-    image: mysql:8.0
+  hydra-postgres:
+    image: postgres:15.4
+    restart: on-failure
     ports:
-      - "3307:3306"
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=hydra
     volumes:
       - type: volume
-        source: hydra-mysql
-        target: /var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=docker
-      - MYSQL_PASSWORD=docker
+        source: hydra-postgres
+        target: /var/lib/postgres
     networks:
       - intranet
 
@@ -74,4 +75,4 @@ networks:
 volumes:
   hydra:
   postgres:
-  hydra-mysql:
+  hydra-postgres:
