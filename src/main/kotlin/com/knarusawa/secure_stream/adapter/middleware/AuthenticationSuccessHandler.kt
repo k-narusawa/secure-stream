@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.client.WebClient
 import sh.ory.hydra.api.OAuth2Api
 import sh.ory.hydra.model.AcceptOAuth2LoginRequest
 import java.time.LocalDateTime
@@ -19,7 +18,6 @@ import java.time.LocalDateTime
 class AuthenticationSuccessHandler(
         private val loginCompleteService: LoginCompleteService,
         private val oAuth2Api: OAuth2Api,
-        private val webClientBuilder: WebClient.Builder
 ) : org.springframework.security.web.authentication.AuthenticationSuccessHandler {
     private val log = logger()
 
@@ -42,7 +40,7 @@ class AuthenticationSuccessHandler(
             response?.writer?.println(
                     "{ \"redirect_to\": \"${res.redirectTo}\"}"
             )
-            
+
             return
         }
 

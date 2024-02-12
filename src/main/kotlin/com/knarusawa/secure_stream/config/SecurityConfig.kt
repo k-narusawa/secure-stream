@@ -34,6 +34,9 @@ class SecurityConfig {
     @Autowired
     private lateinit var authorizeFilter: AuthorizeFilter
 
+    @Autowired
+    private lateinit var environments: Environments
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.cors {
@@ -79,10 +82,11 @@ class SecurityConfig {
         config.addAllowedHeader(CorsConfiguration.ALL)
         config.allowCredentials = true
 
-        config.addAllowedOrigin("http://127.0.0.1:3000")
-        config.addAllowedOrigin("http://localhost:3000")
-        config.addAllowedOrigin("http://127.0.0.1:3001")
-        config.addAllowedOrigin("http://localhost:3001")
+        val allowedOrigins = environments.allowedOrigin.split(",")
+
+        allowedOrigins.forEach {
+            config.addAllowedOrigin(it)
+        }
 
         val corsSource = UrlBasedCorsConfigurationSource()
         corsSource.registerCorsConfiguration("/**", config)

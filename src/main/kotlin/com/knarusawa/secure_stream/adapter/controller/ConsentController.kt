@@ -4,18 +4,14 @@ import com.knarusawa.secure_stream.adapter.controller.response.ApiV1ConsentGetRe
 import com.knarusawa.secure_stream.adapter.controller.response.ApiV1ConsentPostResponse
 import org.springframework.security.web.csrf.CsrfToken
 import org.springframework.web.bind.annotation.*
-import sh.ory.hydra.ApiClient
 import sh.ory.hydra.api.OAuth2Api
 import sh.ory.hydra.model.AcceptOAuth2ConsentRequest
 
 @RestController
 @RequestMapping("/api/v1/consent")
-class ConsentController {
-    val apiClient = ApiClient().apply {
-        this.setBasePath("http://localhost:4445")
-    }
-    val oauth2 = OAuth2Api(apiClient)
-
+class ConsentController(
+        private val oAuth2Api: OAuth2Api,
+) {
     @GetMapping
     fun apiV1ConsentGet(
             csrfToken: CsrfToken,
@@ -25,7 +21,7 @@ class ConsentController {
             throw IllegalStateException("Challengeが見つかりません")
         }
 
-        val res = oauth2.getOAuth2ConsentRequest(consentChallenge)
+        val res = oAuth2Api.getOAuth2ConsentRequest(consentChallenge)
         val scopes = res.client?.scope?.split(" ") ?: listOf()
 
         return ApiV1ConsentGetResponse(
@@ -49,7 +45,7 @@ class ConsentController {
         val consentRequest = AcceptOAuth2ConsentRequest().apply {
             grantScope = scopes
         }
-        val res = oauth2.acceptOAuth2ConsentRequest(
+        val res = oAuth2Api.acceptOAuth2ConsentRequest(
                 challenge,
                 consentRequest
         )
