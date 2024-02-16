@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 data class UserRecord(
         @Id
         @Column(name = "user_id")
-        val userId: String,
+        val userId: String = "",
 
         @Column(name = "username")
         val username: String = "",
