@@ -35,7 +35,7 @@ class AuthenticationSuccessHandler(
         log.info("login_challenge: $loginChallenge")
 
         if (loginChallenge != null) {
-            val req = AcceptOAuth2LoginRequest().subject(user.username)
+            val req = AcceptOAuth2LoginRequest().subject(user.userId.value())
             val res = oAuth2Api.acceptOAuth2LoginRequest(loginChallenge, req)
 
             response?.setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
