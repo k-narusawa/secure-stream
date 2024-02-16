@@ -71,3 +71,14 @@ project(":auth") {
         implementation("sh.ory.hydra:hydra-client:2.2.0-rc.3")
     }
 }
+
+project(":api") {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation("com.auth0:java-jwt:4.4.0")
+        implementation("org.springframework.security:spring-security-oauth2-resource-server:6.2.1")
+    }
+}

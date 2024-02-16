@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+#  flyway:
+#    enabled: true
+#    locations: "classpath:db/migrate"

@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/secure_stream
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+#  flyway:
+#    enabled: true
+#    locations: "classpath:db/migrate"
