@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/api
-    username: root
-    password: root
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
 #  flyway:
 #    enabled: true

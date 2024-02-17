@@ -43,13 +43,15 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=secure_stream
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     volumes:
       - type: volume
         source: postgres
         target: /var/lib/postgres
+      - type: bind
+        source: ./docker/postgres/init-db.sh
+        target: /docker-entrypoint-initdb.d/init-db.sh
     networks:
       - intranet
 
