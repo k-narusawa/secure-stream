@@ -17,9 +17,9 @@ server:
         secure: true
         http-only: true
 
-  env:gaa
-cors:
-  allowed-origin: ${ALLOWED_ORIGIN}
-hydra:
-  admin:
-    url: ${HYDRA_ADMIN_CLIENT:http://localhost:4445}
+env:
+  cors:
+    allowed-origin: ${ALLOWED_ORIGIN}
+  hydra:
+    admin:
+      url: ${HYDRA_ADMIN_CLIENT:http://localhost:4445}
