@@ -39,9 +39,7 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-security")
         implementation("org.springframework.security:spring-security-config:6.2.1")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
-        implementation("org.flywaydb:flyway-core:9.22.3")
 
-        runtimeOnly("org.flywaydb:flyway-mysql:9.22.3")
         runtimeOnly("org.postgresql:postgresql:42.7.1")
 
         testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -69,5 +67,20 @@ project(":auth") {
     dependencies {
         implementation("com.auth0:java-jwt:4.4.0")
         implementation("sh.ory.hydra:hydra-client:2.2.0-rc.3")
+        implementation("org.flywaydb:flyway-core:9.22.3")
+
+        runtimeOnly("org.flywaydb:flyway-mysql:9.22.3")
+    }
+}
+
+project(":api") {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation("com.auth0:java-jwt:4.4.0")
+        implementation("org.springframework.security:spring-security-oauth2-resource-server")
+        implementation("org.springframework.security:spring-security-oauth2-jose")
     }
 }
