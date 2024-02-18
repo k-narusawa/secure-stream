@@ -29,14 +29,16 @@ class RequestFilter : OncePerRequestFilter() {
         val requestId = UUID.randomUUID().toString()
         MDC.put("requestId", requestId)
 
-        logger.info("リクエスト メソッド:[${request.method}] URI:[${request.requestURI}]")
+        val requestURI = request.requestURI + request.queryString
+
+        logger.info("リクエスト メソッド:[${request.method}] URI:[${requestURI}]")
 
         val start = System.currentTimeMillis()
         try {
             filterChain.doFilter(request, response)
         } finally {
             val end = System.currentTimeMillis()
-            logger.info("レスポンス メソッド:[${request.method}] URI:[${request.requestURI}] ステータス:[${response.status}] レスポンスタイム:[${end - start}ms]")
+            logger.info("レスポンス メソッド:[${request.method}] URI:[${requestURI}] ステータス:[${response.status}] レスポンスタイム:[${end - start}ms]")
             MDC.clear()
         }
     }
