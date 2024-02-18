@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "3.2.1"
     id("io.spring.dependency-management") version "1.1.4"
+    id("com.google.cloud.tools.jib") version "3.4.0"
     kotlin("jvm") version "1.9.21"
     kotlin("plugin.spring") version "1.9.21"
     kotlin("plugin.jpa") version "1.9.21"
@@ -28,6 +29,7 @@ subprojects {
         plugin("kotlin-spring")
         plugin("org.springframework.boot")
         plugin("io.spring.dependency-management")
+        plugin("com.google.cloud.tools.jib")
     }
 
     dependencies {
@@ -60,6 +62,8 @@ subprojects {
 }
 
 project(":auth") {
+    version = "0.0.1"
+
     repositories {
         mavenCentral()
     }
@@ -70,6 +74,26 @@ project(":auth") {
         implementation("org.flywaydb:flyway-core:9.22.3")
 
         runtimeOnly("org.flywaydb:flyway-mysql:9.22.3")
+    }
+
+    jib {
+        container {
+            ports = listOf("8080")
+            jvmFlags = listOf(
+                    "-server",
+                    "-Djava.awt.headless=true",
+                    "-XX:InitialRAMFraction=2",
+                    "-XX:MinRAMFraction=2",
+                    "-XX:MaxRAMFraction=2",
+                    "-XX:+UseG1GC",
+                    "-XX:MaxGCPauseMillis=100",
+                    "-XX:+UseStringDeduplication"
+            )
+        }
+        to {
+            image = "registry.hub.docker.com/19992240/secure-stream-auth"
+            tags = setOf("${project.version}", "latest")
+        }
     }
 }
 
