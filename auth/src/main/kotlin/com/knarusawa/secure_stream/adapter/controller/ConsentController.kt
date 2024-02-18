@@ -26,27 +26,27 @@ class ConsentController(
             throw IllegalStateException("Challengeが見つかりません")
         }
 
-        val res = oAuth2Api.getOAuth2ConsentRequest(consentChallenge)
-        val scopes = res.requestedScope?.toList()
+        val oauth2ConsentRequest = oAuth2Api.getOAuth2ConsentRequest(consentChallenge)
+        val scopes = oauth2ConsentRequest.requestedScope?.toList()
 
-        if (scopes == null || res.skip == true) {
+        if (scopes == null || oauth2ConsentRequest.skip == true) {
             val consentRequest = AcceptOAuth2ConsentRequest().apply {
-                grantScope = res.requestedScope
-                grantAccessTokenAudience = res.requestedAccessTokenAudience
+                grantScope = oauth2ConsentRequest.requestedScope
+                grantAccessTokenAudience = oauth2ConsentRequest.requestedAccessTokenAudience
             }
 
-            val res = oAuth2Api.acceptOAuth2ConsentRequest(consentChallenge, consentRequest)
+            val oauth2RedirectTo = oAuth2Api.acceptOAuth2ConsentRequest(consentChallenge, consentRequest)
 
             return ApiV1ConsentGetResponse(
                     challenge = consentChallenge,
                     scopes = listOf(),
                     csrfToken = csrfToken.token.toString(),
-                    redirectTo = res.redirectTo
+                    redirectTo = oauth2RedirectTo.redirectTo
             )
         }
 
         return ApiV1ConsentGetResponse(
-                challenge = res.challenge,
+                challenge = oauth2ConsentRequest.challenge,
                 scopes = scopes.map {
                     when (it) {
                         "openid" -> ApiV1ConsentGetResponse.Scope(name = it, required = true, isChecked = false)
