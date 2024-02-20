@@ -1,6 +1,6 @@
-package com.knarusawa.secure_stream.adapter.gateway.db.dao
+package com.knarusawa.common.adapter.gateway.dao
 
-import com.knarusawa.secure_stream.adapter.gateway.db.record.ProfileRecord
+import com.knarusawa.common.adapter.gateway.record.ProfileRecord
 import org.springframework.data.repository.CrudRepository
 
 interface ProfileRecordDao : CrudRepository<ProfileRecord, String> {
