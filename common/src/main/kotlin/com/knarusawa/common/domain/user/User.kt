@@ -1,6 +1,6 @@
-package com.knarusawa.secure_stream.domain.user
+package com.knarusawa.common.domain.user
 
-import com.knarusawa.secure_stream.adapter.gateway.db.record.UserRecord
+import com.knarusawa.common.adapter.gateway.record.UserRecord
 
 class User private constructor(
         val userId: UserId,

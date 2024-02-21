@@ -1,4 +1,4 @@
-package com.knarusawa.secure_stream.adapter.gateway.db.record
+package com.knarusawa.common.adapter.gateway.record
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

@@ -1,6 +1,6 @@
-package com.knarusawa.secure_stream.domain.user
+package com.knarusawa.common.domain.user
 
-import com.knarusawa.secure_stream.config.SecurityConfig
+import com.knarusawa.common.config.CommonConfig
 
 data class Password private constructor(
         private val value: String,
@@ -15,7 +15,7 @@ data class Password private constructor(
                     .takeIf { LENGTH_RANGE.contains(it.length) && PATTERN.matches(value) }
                     ?.let {
                         Password(
-                                value = SecurityConfig().passwordEncoder().encode(value),
+                                value = CommonConfig().passwordEncoder().encode(value),
                                 consumed = false
                         )
                     }

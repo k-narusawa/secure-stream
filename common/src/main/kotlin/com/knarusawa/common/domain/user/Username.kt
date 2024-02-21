@@ -1,4 +1,4 @@
-package com.knarusawa.secure_stream.domain.user
+package com.knarusawa.common.domain.user
 
 data class Username private constructor(
         private val value: String

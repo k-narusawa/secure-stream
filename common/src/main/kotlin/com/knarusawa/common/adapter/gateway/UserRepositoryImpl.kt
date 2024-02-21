@@ -1,11 +1,11 @@
-package com.knarusawa.secure_stream.adapter.gateway.db
+package com.knarusawa.common.adapter.gateway
 
-import com.knarusawa.secure_stream.adapter.gateway.db.dao.UserRecordDao
-import com.knarusawa.secure_stream.adapter.gateway.db.record.UserRecord
-import com.knarusawa.secure_stream.domain.user.User
-import com.knarusawa.secure_stream.domain.user.UserId
-import com.knarusawa.secure_stream.domain.user.UserRepository
-import com.knarusawa.secure_stream.domain.user.Username
+import com.knarusawa.common.adapter.gateway.dao.UserRecordDao
+import com.knarusawa.common.adapter.gateway.record.UserRecord
+import com.knarusawa.common.domain.user.User
+import com.knarusawa.common.domain.user.UserId
+import com.knarusawa.common.domain.user.UserRepository
+import com.knarusawa.common.domain.user.Username
 import org.springframework.stereotype.Repository
 
 @Repository

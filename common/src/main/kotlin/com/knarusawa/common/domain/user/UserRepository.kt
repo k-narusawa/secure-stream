@@ -1,4 +1,4 @@
-package com.knarusawa.secure_stream.domain.user
+package com.knarusawa.common.domain.user
 
 interface UserRepository {
     fun save(user: User)
