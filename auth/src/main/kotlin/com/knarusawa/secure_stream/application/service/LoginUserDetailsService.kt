@@ -1,8 +1,8 @@
 package com.knarusawa.secure_stream.application.service
 
+import com.knarusawa.common.domain.user.UserRepository
+import com.knarusawa.common.domain.user.Username
 import com.knarusawa.secure_stream.domain.LoginUserDetails
-import com.knarusawa.secure_stream.domain.user.UserRepository
-import com.knarusawa.secure_stream.domain.user.Username
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException

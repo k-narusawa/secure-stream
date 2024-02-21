@@ -72,6 +72,7 @@ project(":auth") {
         implementation("com.auth0:java-jwt:4.4.0")
         implementation("sh.ory.hydra:hydra-client:2.2.0")
         implementation("org.flywaydb:flyway-core:9.22.3")
+        implementation(project(":common"))
 
         runtimeOnly("org.flywaydb:flyway-mysql:9.22.3")
     }
@@ -80,14 +81,14 @@ project(":auth") {
         container {
             ports = listOf("8080")
             jvmFlags = listOf(
-                    "-server",
-                    "-Djava.awt.headless=true",
-                    "-XX:InitialRAMFraction=2",
-                    "-XX:MinRAMFraction=2",
-                    "-XX:MaxRAMFraction=2",
-                    "-XX:+UseG1GC",
-                    "-XX:MaxGCPauseMillis=100",
-                    "-XX:+UseStringDeduplication"
+                "-server",
+                "-Djava.awt.headless=true",
+                "-XX:InitialRAMFraction=2",
+                "-XX:MinRAMFraction=2",
+                "-XX:MaxRAMFraction=2",
+                "-XX:+UseG1GC",
+                "-XX:MaxGCPauseMillis=100",
+                "-XX:+UseStringDeduplication"
             )
         }
         to {

@@ -1,6 +1,6 @@
 package com.knarusawa.secure_stream.domain
 
-import com.knarusawa.secure_stream.domain.user.User
+import com.knarusawa.common.domain.user.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
