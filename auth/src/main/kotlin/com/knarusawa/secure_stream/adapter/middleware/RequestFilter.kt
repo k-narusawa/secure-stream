@@ -1,4 +1,4 @@
-package com.knarusawa.secure_stream.adapter.filter
+package com.knarusawa.secure_stream.adapter.middleware
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

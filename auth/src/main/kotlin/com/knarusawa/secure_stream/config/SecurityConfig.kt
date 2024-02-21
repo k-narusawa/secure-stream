@@ -1,9 +1,9 @@
 package com.knarusawa.secure_stream.config
 
-import com.knarusawa.secure_stream.adapter.filter.AuthenticationFilter
-import com.knarusawa.secure_stream.adapter.filter.AuthorizeFilter
 import com.knarusawa.secure_stream.adapter.middleware.AuthenticationFailureHandler
+import com.knarusawa.secure_stream.adapter.middleware.AuthenticationFilter
 import com.knarusawa.secure_stream.adapter.middleware.AuthenticationSuccessHandler
+import com.knarusawa.secure_stream.adapter.middleware.AuthorizeFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

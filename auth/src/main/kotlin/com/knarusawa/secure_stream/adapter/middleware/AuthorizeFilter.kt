@@ -1,4 +1,4 @@
-package com.knarusawa.secure_stream.adapter.filter
+package com.knarusawa.secure_stream.adapter.middleware
 
 import com.knarusawa.common.domain.user.UserRepository
 import com.knarusawa.secure_stream.domain.LoginUserDetails
