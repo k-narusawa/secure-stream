@@ -1,4 +1,4 @@
-package com.knarusawa.common.adapter.gateway.middleware
+package com.knarusawa.common.adapter.middleware
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
