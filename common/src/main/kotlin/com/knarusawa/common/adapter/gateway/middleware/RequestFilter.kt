@@ -1,4 +1,4 @@
-package com.knarusawa.secure_stream.adapter.middleware
+package com.knarusawa.common.adapter.gateway.middleware
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -29,9 +29,10 @@ class RequestFilter : OncePerRequestFilter() {
         val requestId = UUID.randomUUID().toString()
         MDC.put("requestId", requestId)
 
-        val requestURI = request.requestURI + request.queryString
+        val requestURI = request.requestURI
+        val queryString = request.queryString
 
-        logger.info("リクエスト メソッド:[${request.method}] URI:[${requestURI}]")
+        logger.info("リクエスト メソッド:[${request.method}] URI:[${requestURI}] Query:[${queryString}]")
 
         val start = System.currentTimeMillis()
         try {
