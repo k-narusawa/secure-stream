@@ -81,14 +81,14 @@ project(":auth") {
         container {
             ports = listOf("8080")
             jvmFlags = listOf(
-                "-server",
-                "-Djava.awt.headless=true",
-                "-XX:InitialRAMFraction=2",
-                "-XX:MinRAMFraction=2",
-                "-XX:MaxRAMFraction=2",
-                "-XX:+UseG1GC",
-                "-XX:MaxGCPauseMillis=100",
-                "-XX:+UseStringDeduplication"
+                    "-server",
+                    "-Djava.awt.headless=true",
+                    "-XX:InitialRAMFraction=2",
+                    "-XX:MinRAMFraction=2",
+                    "-XX:MaxRAMFraction=2",
+                    "-XX:+UseG1GC",
+                    "-XX:MaxGCPauseMillis=100",
+                    "-XX:+UseStringDeduplication"
             )
         }
         to {
@@ -107,5 +107,6 @@ project(":api") {
         implementation("com.auth0:java-jwt:4.4.0")
         implementation("org.springframework.security:spring-security-oauth2-resource-server")
         implementation("org.springframework.security:spring-security-oauth2-jose")
+        implementation(project(":common"))
     }
 }
