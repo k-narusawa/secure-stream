@@ -4,7 +4,13 @@ type Query {
 
 type UserInfo {
   userId: String
+  user: User
   profile: Profile
+}
+
+type User{
+  username: String
+  isAccountLock: Boolean
 }
 
 type Profile {

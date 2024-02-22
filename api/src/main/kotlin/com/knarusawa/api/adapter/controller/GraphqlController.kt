@@ -1,11 +1,13 @@
 package com.knarusawa.api.adapter.controller
 
 import com.knarusawa.api.adapter.controller.dto.Profile
+import com.knarusawa.api.adapter.controller.dto.User
 import com.knarusawa.api.adapter.controller.dto.UserInfo
 import com.knarusawa.api.adapter.exception.UnauthorizedException
 import com.knarusawa.api.application.changeProfile.ChangeProfileInputData
 import com.knarusawa.api.application.changeProfile.ChangeProfileService
 import com.knarusawa.api.application.query.ProfileDtoQueryService
+import com.knarusawa.api.application.query.UserDtoQueryService
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
@@ -16,8 +18,9 @@ import org.springframework.stereotype.Controller
 
 @Controller
 class GraphqlController(
+    private val userDtoQueryService: UserDtoQueryService,
     private val profileDtoQueryService: ProfileDtoQueryService,
-    val changeProfileService: ChangeProfileService
+    private val changeProfileService: ChangeProfileService
 ) {
     @QueryMapping
     fun userInfo(
@@ -28,7 +31,19 @@ class GraphqlController(
 
         return UserInfo(
             userId = userId,
+            user = null,
             profile = null
+        )
+    }
+
+    @SchemaMapping
+    fun user(userInfo: UserInfo): User {
+        val user = userDtoQueryService.findByUserId(userInfo.userId)
+            ?: throw UnauthorizedException()
+
+        return User(
+            username = user.username,
+            isAccountLock = user.isAccountLock
         )
     }
 
