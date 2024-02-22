@@ -1,0 +1,30 @@
+type Query {
+  userInfo: UserInfo
+}
+
+type UserInfo {
+  userId: String
+  user: User
+  profile: Profile
+}
+
+type User{
+  username: String
+  isAccountLock: Boolean
+}
+
+type Profile {
+  familyName: String
+  givenName: String
+  nickname: String
+  picture: String
+}
+
+type Mutation {
+  changeProfile(
+    familyName: String!
+    givenName: String!
+    nickname: String
+    picture: String
+  ): Profile
+}

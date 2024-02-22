@@ -22,3 +22,7 @@ logging:
 
 server:
   port: 8081
+
+env:
+  cors:
+    allowed-origin: ${ALLOWED_ORIGIN}
