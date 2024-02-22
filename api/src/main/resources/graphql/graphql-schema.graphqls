@@ -1,0 +1,15 @@
+type Query {
+  userInfo: UserInfo
+}
+
+type UserInfo {
+  userId: String
+  profile: Profile
+}
+
+type Profile {
+  familyName: String
+  givenName: String
+  nickname: String
+  picture: String
+}

@@ -1,22 +1,47 @@
 package com.knarusawa.api.adapter.controller
 
+import com.knarusawa.api.adapter.controller.dto.Profile
+import com.knarusawa.api.adapter.controller.dto.UserInfo
 import com.knarusawa.api.adapter.exception.UnauthorizedException
+import com.knarusawa.api.application.query.ProfileDtoQueryService
+import org.springframework.graphql.data.method.annotation.MutationMapping
+import org.springframework.graphql.data.method.annotation.QueryMapping
+import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.stereotype.Controller
 
-@RestController
-@RequestMapping("/api/v1/userinfo")
-class UserInfoController {
-    @GetMapping
-    fun apiV1UserInfoGet(
-            @AuthenticationPrincipal principal: OAuth2AuthenticatedPrincipal
-    ): ApiV1UserinfoGetResponse {
+@Controller
+class UserInfoController(
+    private val profileDtoQueryService: ProfileDtoQueryService
+) {
+    @QueryMapping
+    fun userInfo(
+        @AuthenticationPrincipal principal: OAuth2AuthenticatedPrincipal
+    ): UserInfo {
         val userId = principal.getAttribute<String?>("sub")
-                ?: throw UnauthorizedException()
+            ?: throw UnauthorizedException()
 
-        return ApiV1UserinfoGetResponse(userId)
+        return UserInfo(
+            userId = userId,
+            profile = null
+        )
+    }
+
+    @SchemaMapping
+    fun profile(userInfo: UserInfo): Profile {
+        val profile = profileDtoQueryService.findByUserId(userInfo.userId)
+
+        return Profile(
+            familyName = profile.familyName,
+            givenName = profile.givenName,
+            nickname = profile.nickname,
+            picture = profile.picture
+        )
+    }
+
+    @MutationMapping
+    fun changeProfile() {
+
     }
 }

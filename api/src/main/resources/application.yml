@@ -6,9 +6,6 @@ spring:
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
-  #  flyway:
-  #    enabled: true
-  #    locations: "classpath:db/migrate"
   security:
     oauth2:
       resourceserver:
@@ -16,9 +13,6 @@ spring:
           introspection-uri: http://localhost:4445/admin/oauth2/introspect
           client-id: bd166c9a-a6ec-4e01-bcd6-f4a7e64a536f
           client-secret: tBW_irIBX7yOShRaheT7QYhweg
-#        jwt:
-#          issuer-uri: http://localhost:44444
-#          jwk-set-uri: http://localhost:44444/.well-known/openid-configuration
 
 logging:
   level:
