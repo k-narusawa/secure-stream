@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
 import org.springframework.stereotype.Controller
 
 @Controller
-class UserInfoController(
+class GraphqlController(
     private val profileDtoQueryService: ProfileDtoQueryService,
     val changeProfileService: ChangeProfileService
 ) {
