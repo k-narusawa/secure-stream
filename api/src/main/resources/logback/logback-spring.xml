@@ -1,0 +1,5 @@
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <logger name="appLogger" level="DEBUG">
+        <appender-ref ref="APPLIATION_LOG"/>
+    </logger>
+</appender>

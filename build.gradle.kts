@@ -81,14 +81,14 @@ project(":auth") {
         container {
             ports = listOf("8080")
             jvmFlags = listOf(
-                "-server",
-                "-Djava.awt.headless=true",
-                "-XX:InitialRAMFraction=2",
-                "-XX:MinRAMFraction=2",
-                "-XX:MaxRAMFraction=2",
-                "-XX:+UseG1GC",
-                "-XX:MaxGCPauseMillis=100",
-                "-XX:+UseStringDeduplication"
+                    "-server",
+                    "-Djava.awt.headless=true",
+                    "-XX:InitialRAMFraction=2",
+                    "-XX:MinRAMFraction=2",
+                    "-XX:MaxRAMFraction=2",
+                    "-XX:+UseG1GC",
+                    "-XX:MaxGCPauseMillis=100",
+                    "-XX:+UseStringDeduplication"
             )
         }
         to {
@@ -109,7 +109,7 @@ project(":api") {
         implementation("org.springframework.security:spring-security-oauth2-jose")
         implementation("org.springframework.graphql:spring-graphql:1.2.4")
         implementation(project(":common"))
-        
+
         testImplementation("org.springframework.graphql:spring-graphql-test:1.2.4")
     }
 }
