@@ -13,3 +13,12 @@ type Profile {
   nickname: String
   picture: String
 }
+
+type Mutation {
+  changeProfile(
+    familyName: String!
+    givenName: String!
+    nickname: String
+    picture: String
+  ): Profile
+}

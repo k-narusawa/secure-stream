@@ -41,4 +41,16 @@ class Profile private constructor(
             picture = record.picture,
         )
     }
+
+    fun change(
+        familyName: FamilyName,
+        givenName: GivenName,
+        nickname: Nickname?,
+        picture: String?
+    ) {
+        this.familyName = familyName
+        this.givenName = givenName
+        this.nickname = nickname
+        this.picture = picture
+    }
 }
