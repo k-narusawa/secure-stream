@@ -107,5 +107,9 @@ project(":api") {
         implementation("com.auth0:java-jwt:4.4.0")
         implementation("org.springframework.security:spring-security-oauth2-resource-server")
         implementation("org.springframework.security:spring-security-oauth2-jose")
+        implementation("org.springframework.graphql:spring-graphql:1.2.4")
+        implementation(project(":common"))
+        
+        testImplementation("org.springframework.graphql:spring-graphql-test:1.2.4")
     }
 }
