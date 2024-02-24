@@ -41,6 +41,7 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-security")
         implementation("org.springframework.security:spring-security-config:6.2.1")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("com.webauthn4j:webauthn4j-core:0.22.1.RELEASE")
 
         runtimeOnly("org.postgresql:postgresql:42.7.1")
 
