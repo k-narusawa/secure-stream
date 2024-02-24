@@ -34,7 +34,7 @@ class User private constructor(
         }
 
         fun from(record: UserRecord) = User(
-                userId = UserId.from(recordString = record.userId),
+                userId = UserId.from(value = record.userId),
                 username = Username.of(value = record.username),
                 password = Password.fromRecordValue(value = record.password),
                 isAccountLock = record.isAccountLock,

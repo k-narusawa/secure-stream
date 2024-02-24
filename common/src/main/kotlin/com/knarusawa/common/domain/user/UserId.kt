@@ -7,9 +7,9 @@ data class UserId private constructor(
 ) {
     companion object {
         fun of() = UserId(value = UUID.randomUUID())
-        fun from(recordString: String): UserId {
+        fun from(value: String): UserId {
             // 失敗したらIllegalArgumentExceptionが投げられる
-            return UserId(UUID.fromString(recordString))
+            return UserId(UUID.fromString(value))
         }
     }
 
