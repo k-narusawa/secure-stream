@@ -7,6 +7,8 @@ spring:
   flyway:
     enabled: true
     locations: "classpath:db/migrate"
+  jpa:
+    show-sql: true
 
 env:
   cors:

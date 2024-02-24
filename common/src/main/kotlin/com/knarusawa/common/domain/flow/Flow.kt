@@ -8,12 +8,12 @@ import java.time.LocalDateTime
 
 class Flow private constructor(
         val flowId: FlowId,
-        val userId: UserId,
+        val userId: UserId?,
         val challenge: String,
         val expiredAt: LocalDateTime,
 ) {
     companion object {
-        fun of(userId: UserId, challenge: Challenge): Flow {
+        fun of(userId: UserId?, challenge: Challenge): Flow {
             return Flow(
                     flowId = FlowId.of(),
                     userId = userId,
@@ -24,7 +24,7 @@ class Flow private constructor(
 
         fun from(record: FlowRecord) = Flow(
                 flowId = FlowId.from(record.flowId),
-                userId = UserId.from(record.userId),
+                userId = record.userId?.let { UserId.from(it) },
                 challenge = record.challenge,
                 expiredAt = record.expiredAt
         )

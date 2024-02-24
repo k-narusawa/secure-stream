@@ -15,7 +15,7 @@ data class FlowRecord(
         val flowId: String = "",
 
         @Column(name = "user_id")
-        val userId: String = "",
+        val userId: String? = null,
 
         @Column(name = "challenge")
         val challenge: String = "",
@@ -32,7 +32,7 @@ data class FlowRecord(
     companion object {
         fun from(flow: Flow) = FlowRecord(
                 flowId = flow.flowId.value(),
-                userId = flow.userId.toString(),
+                userId = flow.userId?.value(),
                 challenge = flow.challenge,
                 expiredAt = flow.expiredAt
         )

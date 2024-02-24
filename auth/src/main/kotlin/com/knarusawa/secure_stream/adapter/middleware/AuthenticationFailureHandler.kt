@@ -32,7 +32,7 @@ class AuthenticationFailureHandler(
             }
 
             else -> {
-                log.error("想定外の認証失敗")
+                log.error("想定外の認証失敗 ${exception?.message}")
                 loginFailureService.execute(
                         inputData = LoginFailureInputData(
                                 username = null,

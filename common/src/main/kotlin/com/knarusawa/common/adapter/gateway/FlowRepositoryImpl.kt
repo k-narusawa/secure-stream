@@ -19,7 +19,7 @@ class FlowRepositoryImpl(
     override fun findByFlowId(flowId: FlowId): Flow? {
         val record = flowRecordDao.findByFlowId(flowId = flowId.value())
         return record?.let {
-            Flow.from(record)
+            Flow.from(it)
         }
     }
 

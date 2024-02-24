@@ -41,10 +41,11 @@ class SecurityConfig {
             it.configurationSource(this.corsConfigurationSource())
         }
         http.csrf {
+            it.ignoringRequestMatchers("/api/v1/login/webauthn")
             it.csrfTokenRepository(CookieCsrfTokenRepository())
         }
         http.authorizeHttpRequests {
-            it.requestMatchers("/api/v1/csrf", "/api/v1/login").permitAll()
+            it.requestMatchers("/api/v1/csrf", "/api/v1/login", "/api/v1/login/webauthn", "/api/v1/login/webauthn/request").permitAll()
             it.anyRequest().authenticated()
         }
         http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter::class.java)
@@ -56,7 +57,8 @@ class SecurityConfig {
     fun authenticationFilter(): UsernamePasswordAuthenticationFilter {
         val filter = AuthenticationFilter(authenticationManager())
         filter.setRequiresAuthenticationRequestMatcher {
-            it.method == "POST" && it.requestURI == "/api/v1/login"
+            (it.method == "POST" && it.requestURI == "/api/v1/login") or
+                    (it.method == "POST" && it.requestURI == "/api/v1/login/webauthn")
         }
         filter.setAuthenticationManager(authenticationManager())
         filter.setAuthenticationSuccessHandler(authenticationSuccessHandler)

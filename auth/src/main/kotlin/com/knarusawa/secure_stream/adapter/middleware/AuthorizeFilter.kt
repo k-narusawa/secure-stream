@@ -22,6 +22,8 @@ class AuthorizeFilter(
     companion object {
         private val matchers = listOf(
                 AntPathRequestMatcher("/api/v1/login"),
+                AntPathRequestMatcher("/api/v1/login/webauthn"),
+                AntPathRequestMatcher("/api/v1/login/webauthn/request"),
                 AntPathRequestMatcher("/api/v1/csrf"),
         )
         private val combinedMatcher = OrRequestMatcher(matchers)
@@ -29,6 +31,7 @@ class AuthorizeFilter(
     }
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+        log.info("AuthorizeFilter")
         if (!combinedMatcher.matches(request)) {
             val user = request.session.getAttribute("user") as? LoginUserDetails
                     ?: throw InvalidRequestStateException("想定外の認証エラー")
