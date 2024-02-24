@@ -1,4 +1,4 @@
-CREATE TABLE credentials
+CREATE TABLE webauthn_credentials
 (
     credential_id                       VARCHAR(255) PRIMARY KEY NOT NULL,
     user_id                             VARCHAR(255)             NOT NULL,

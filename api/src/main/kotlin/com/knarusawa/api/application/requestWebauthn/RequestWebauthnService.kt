@@ -47,7 +47,7 @@ class RequestWebauthnService(
         )
 
         val authenticatorSelectionCriteria = AuthenticatorSelectionCriteria(
-                /* authenticatorAttachment = */ authenticatorAttachment,
+                /* authenticatorAttachment = */ null,
                 /* requireResidentKey =      */ false,
                 /* userVerification =        */ UserVerificationRequirement.REQUIRED
         )

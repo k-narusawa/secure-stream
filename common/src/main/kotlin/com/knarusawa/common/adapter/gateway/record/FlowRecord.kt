@@ -12,16 +12,16 @@ import java.time.LocalDateTime
 data class FlowRecord(
         @Id
         @Column(name = "flow_id")
-        val flowId: String,
+        val flowId: String = "",
 
         @Column(name = "user_id")
-        val userId: String,
+        val userId: String = "",
 
         @Column(name = "challenge")
-        val challenge: String,
+        val challenge: String = "",
 
         @Column(name = "expired_at")
-        val expiredAt: LocalDateTime,
+        val expiredAt: LocalDateTime = LocalDateTime.now(),
 
         @Column(name = "created_at", insertable = false, updatable = false)
         val createdAt: LocalDateTime? = null,

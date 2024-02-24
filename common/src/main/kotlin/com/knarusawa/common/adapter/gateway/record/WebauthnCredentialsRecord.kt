@@ -11,28 +11,28 @@ import jakarta.persistence.Table
 data class WebauthnCredentialsRecord(
         @Id
         @Column(name = "credential_id")
-        val credentialId: String,
+        val credentialId: String = "",
 
         @Column(name = "user_id")
-        val userId: String,
+        val userId: String = "",
 
         @Column(name = "serialized_attested_credential_data")
-        val serializedAttestedCredentialData: String,
+        val serializedAttestedCredentialData: String = "",
 
         @Column(name = "serialized_envelope")
-        val serializedEnvelope: String,
+        val serializedEnvelope: String = "",
 
         @Column(name = "serialized_transports")
-        val serializedTransports: String,
+        val serializedTransports: String = "",
 
         @Column(name = "serialized_authenticator_extensions")
-        val serializedAuthenticatorExtensions: String,
+        val serializedAuthenticatorExtensions: String = "",
 
         @Column(name = "serialized_client_extensions")
-        val serializedClientExtensions: String,
+        val serializedClientExtensions: String = "",
 
         @Column(name = "counter")
-        val counter: Long,
+        val counter: Long = 0L,
 ) {
     companion object {
         fun from(credentials: WebauthnCredentials) = WebauthnCredentialsRecord(
