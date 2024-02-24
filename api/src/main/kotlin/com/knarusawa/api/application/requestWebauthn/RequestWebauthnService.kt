@@ -21,10 +21,6 @@ class RequestWebauthnService(
     @Transactional
     fun exec(inputData: RequestWebauthnInputData): RequestWebauthnOutputData {
         val challenge = DefaultChallenge()
-        val authenticatorAttachment = when (inputData.authenticatorAttachment) {
-            RequestWebauthnInputData.AuthenticatorAttachment.CROSS_PLATFORM -> AuthenticatorAttachment.CROSS_PLATFORM
-            RequestWebauthnInputData.AuthenticatorAttachment.PLATFORM -> AuthenticatorAttachment.PLATFORM
-        }
 
         val pubKeyCredParams = listOf(
                 PublicKeyCredentialParameters(
@@ -48,12 +44,12 @@ class RequestWebauthnService(
 
         val authenticatorSelectionCriteria = AuthenticatorSelectionCriteria(
                 /* authenticatorAttachment = */ null,
-                /* requireResidentKey =      */ false,
+                /* requireResidentKey =      */ true,
                 /* userVerification =        */ UserVerificationRequirement.REQUIRED
         )
 
         val options = PublicKeyCredentialCreationOptions(
-                /* rp =                     */ PublicKeyCredentialRpEntity(environments.rpId, "webauthn-demo"),
+                /* rp =                     */ PublicKeyCredentialRpEntity(environments.rpId, "SecureStream"),
                 /* user =                   */ user,
                 /* challenge =              */ challenge,
                 /* pubKeyCredParams =       */ pubKeyCredParams,

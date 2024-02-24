@@ -26,10 +26,7 @@ class WebauthnController(
         val userId = principal.getAttribute<String?>("sub")
                 ?: throw UnauthorizedException()
 
-        val inputData = RequestWebauthnInputData(
-                userId = UserId.from(userId),
-                authenticatorAttachment = RequestWebauthnInputData.AuthenticatorAttachment.CROSS_PLATFORM
-        )
+        val inputData = RequestWebauthnInputData(userId = UserId.from(userId))
 
         val outputData = requestWebauthnService.exec(inputData)
 
