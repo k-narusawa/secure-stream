@@ -1,12 +1,12 @@
 package com.knarusawa.common.domain.webauthn
 
-import com.knarusawa.common.adapter.gateway.record.WebAuthnCredentialsRecord
+import com.knarusawa.common.adapter.gateway.record.WebauthnCredentialsRecord
 import com.webauthn4j.authenticator.AuthenticatorImpl
 import com.webauthn4j.converter.AttestedCredentialDataConverter
 import com.webauthn4j.converter.util.ObjectConverter
 import com.webauthn4j.util.Base64UrlUtil
 
-class WebAuthnCredentials private constructor(
+class WebauthnCredentials private constructor(
         val credentialId: String,
         val userId: String,
         val serializedAttestedCredentialData: String,
@@ -24,7 +24,7 @@ class WebAuthnCredentials private constructor(
                 credentialId: ByteArray?,
                 userId: String,
                 authenticator: AuthenticatorImpl,
-        ): WebAuthnCredentials {
+        ): WebauthnCredentials {
             val objectConverter = ObjectConverter()
             val attestedCredentialDataConverter = AttestedCredentialDataConverter(objectConverter)
             val attestationStatementEnvelope =
@@ -35,7 +35,7 @@ class WebAuthnCredentials private constructor(
             val serializedAttestedCredentialData =
                     attestedCredentialDataConverter.convert(authenticator.attestedCredentialData)
 
-            return WebAuthnCredentials(
+            return WebauthnCredentials(
                     credentialId = Base64UrlUtil.encodeToString(credentialId),
                     userId = userId,
                     serializedAttestedCredentialData = Base64UrlUtil.encodeToString(
@@ -63,7 +63,7 @@ class WebAuthnCredentials private constructor(
             )
         }
 
-        fun from(record: WebAuthnCredentialsRecord) = WebAuthnCredentials(
+        fun from(record: WebauthnCredentialsRecord) = WebauthnCredentials(
                 credentialId = record.credentialId,
                 userId = record.userId,
                 serializedAttestedCredentialData = record.serializedAttestedCredentialData,
