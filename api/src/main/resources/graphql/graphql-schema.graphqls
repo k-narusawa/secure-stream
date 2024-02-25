@@ -11,6 +11,8 @@ type UserInfo {
 type User{
   username: String
   isAccountLock: Boolean
+  mfa: Boolean
+  passkey: Boolean
 }
 
 type Profile {
