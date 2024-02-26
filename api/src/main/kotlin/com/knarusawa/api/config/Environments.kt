@@ -7,4 +7,7 @@ import org.springframework.context.annotation.Configuration
 class Environments {
     @Value("\${env.cors.allowed-origin}")
     lateinit var allowedOrigin: String
+
+    @Value("\${env.webauthn.rp.id}")
+    lateinit var rpId: String
 }

@@ -41,6 +41,7 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-security")
         implementation("org.springframework.security:spring-security-config:6.2.1")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("com.webauthn4j:webauthn4j-core:0.22.1.RELEASE")
 
         runtimeOnly("org.postgresql:postgresql:42.7.1")
 
@@ -72,6 +73,7 @@ project(":auth") {
         implementation("com.auth0:java-jwt:4.4.0")
         implementation("sh.ory.hydra:hydra-client:2.2.0")
         implementation("org.flywaydb:flyway-core:9.22.3")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation(project(":common"))
 
         runtimeOnly("org.flywaydb:flyway-mysql:9.22.3")

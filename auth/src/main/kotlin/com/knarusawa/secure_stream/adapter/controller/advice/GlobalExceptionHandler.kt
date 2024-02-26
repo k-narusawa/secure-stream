@@ -2,6 +2,7 @@ package com.knarusawa.secure_stream.adapter.controller.advice
 
 import com.knarusawa.secure_stream.adapter.controller.response.ErrorResponse
 import com.knarusawa.secure_stream.adapter.exception.AuthenticationFailedException
+import com.knarusawa.secure_stream.application.exception.UserNotFoundException
 import com.knarusawa.secure_stream.util.logger
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.boot.logging.LogLevel
@@ -44,6 +45,22 @@ class GlobalExceptionHandler {
                         logLevel = LogLevel.WARN
                 ),
                 HttpStatus.UNAUTHORIZED
+        )
+    }
+
+    @ExceptionHandler(UserNotFoundException::class)
+    fun handleUserNotFoundException(
+            ex: UserNotFoundException,
+            request: HttpServletRequest
+    ): ResponseEntity<ErrorResponse> {
+        log.warn("message: ${ex.message}, cause: ${ex.cause}, ex: $ex")
+        return ResponseEntity(
+                ErrorResponse.of(
+                        exception = ex,
+                        errorMessage = ex.message,
+                        logLevel = LogLevel.WARN
+                ),
+                HttpStatus.BAD_REQUEST
         )
     }
 
