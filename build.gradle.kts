@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.2.1"
     id("io.spring.dependency-management") version "1.1.4"
     id("com.google.cloud.tools.jib") version "3.4.0"
+    id("org.flywaydb.flyway") version "9.22.3"
     kotlin("jvm") version "1.9.21"
     kotlin("plugin.spring") version "1.9.21"
     kotlin("plugin.jpa") version "1.9.21"
@@ -76,7 +77,7 @@ project(":auth") {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation(project(":common"))
 
-        runtimeOnly("org.flywaydb:flyway-mysql:9.22.3")
+        runtimeOnly("org.postgresql:postgresql:42.7.1")
     }
 
     jib {
@@ -114,5 +115,17 @@ project(":api") {
         implementation(project(":secure-stream-openapi:kotlin-spring"))
 
         testImplementation("org.springframework.graphql:spring-graphql-test:1.2.4")
+    }
+}
+
+project(":secure-stream-openapi:kotlin-spring") {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation("io.swagger.core.v3:swagger-annotations:2.2.20")
+        implementation("io.swagger.core.v3:swagger-core:2.2.20")
+        implementation("io.swagger.core.v3:swagger-models:2.2.20")
     }
 }
