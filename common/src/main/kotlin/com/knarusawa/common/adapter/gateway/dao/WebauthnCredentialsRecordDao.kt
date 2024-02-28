@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository
 interface WebauthnCredentialsRecordDao : CrudRepository<WebauthnCredentialsRecord, String> {
     fun findByCredentialId(credentialId: String): WebauthnCredentialsRecord?
     fun findByUserId(userId: String): List<WebauthnCredentialsRecord>
+    fun deleteByUserId(userId: String)
 }

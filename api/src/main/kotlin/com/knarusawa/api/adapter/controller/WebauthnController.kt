@@ -1,6 +1,8 @@
 package com.knarusawa.api.adapter.controller
 
 import com.knarusawa.api.adapter.exception.UnauthorizedException
+import com.knarusawa.api.application.deleteWebauthn.DeleteWebauthnInputData
+import com.knarusawa.api.application.deleteWebauthn.DeleteWebauthnService
 import com.knarusawa.api.application.registerWebauthn.RegisterWebauthnInputData
 import com.knarusawa.api.application.registerWebauthn.RegisterWebauthnService
 import com.knarusawa.api.application.requestWebauthn.RequestWebauthnInputData
@@ -14,16 +16,14 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class WebauthnController(
     private val requestWebauthnService: RequestWebauthnService,
     private val registerWebauthnService: RegisterWebauthnService,
+    private val deleteWebauthnService: DeleteWebauthnService,
 ) : ApiSecureStream {
-    
     override fun requestWebauthnRegistration(): ResponseEntity<RequestWebauthnRegistration> {
         val principal =
             SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
@@ -34,7 +34,7 @@ class WebauthnController(
         val inputData = RequestWebauthnInputData(userId = UserId.from(userId))
 
         val outputData = requestWebauthnService.exec(inputData)
-        println(outputData.options.pubKeyCredParams)
+
         return ResponseEntity.ok(
             RequestWebauthnRegistration(
                 flowId = outputData.flowId.value(),
@@ -96,6 +96,17 @@ class WebauthnController(
             clientDataJSON = registerWebauthnRequest.response.clientDataJSON ?: "",
         )
         registerWebauthnService.exec(inputData)
+        return ResponseEntity(HttpStatus.OK)
+    }
+
+    override fun deleteWebauthn(): ResponseEntity<Unit> {
+        val principal =
+            SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
+        val userId = principal?.getAttribute<String?>("sub")
+            ?: throw UnauthorizedException()
+
+        deleteWebauthnService.exec(inputData = DeleteWebauthnInputData(userId = UserId.from(userId)))
+
         return ResponseEntity(HttpStatus.OK)
     }
 
