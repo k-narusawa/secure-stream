@@ -23,12 +23,7 @@ class WebauthnController(
     private val requestWebauthnService: RequestWebauthnService,
     private val registerWebauthnService: RegisterWebauthnService,
 ) : ApiSecureStream {
-
-    @RequestMapping(
-        method = [RequestMethod.GET],
-        value = ["/api/v1/users/webauthn/requests"],
-        produces = ["application/json"]
-    )
+    
     override fun requestWebauthnRegistration(): ResponseEntity<RequestWebauthnRegistration> {
         val principal =
             SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
@@ -85,11 +80,6 @@ class WebauthnController(
     }
 
 
-    @RequestMapping(
-        method = [RequestMethod.POST],
-        value = ["/api/v1/users/webauthn"],
-        consumes = ["application/json"]
-    )
     override fun registerWebauthn(registerWebauthnRequest: RegisterWebauthnRequest): ResponseEntity<Unit> {
         val principal =
             SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
