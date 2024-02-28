@@ -26,7 +26,7 @@ class WebauthnController(
 
     @RequestMapping(
         method = [RequestMethod.GET],
-        value = ["/api/v1/webauthn/request"],
+        value = ["/api/v1/users/webauthn/requests"],
         produces = ["application/json"]
     )
     override fun requestWebauthnRegistration(): ResponseEntity<RequestWebauthnRegistration> {
@@ -87,7 +87,7 @@ class WebauthnController(
 
     @RequestMapping(
         method = [RequestMethod.POST],
-        value = ["/api/v1/webauthn"],
+        value = ["/api/v1/users/webauthn"],
         consumes = ["application/json"]
     )
     override fun registerWebauthn(registerWebauthnRequest: RegisterWebauthnRequest): ResponseEntity<Unit> {
