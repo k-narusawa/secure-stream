@@ -2,30 +2,45 @@ package com.knarusawa.secure_stream.adapter.controller
 
 import com.knarusawa.secure_stream.adapter.controller.response.ApiV1LoginGetResponse
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest
 import org.springframework.security.web.csrf.CsrfToken
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import sh.ory.hydra.api.OAuth2Api
+import java.util.*
 
 
 @RestController
 @RequestMapping("/api/v1/login")
 class LoginController(
-        private val oAuth2Api: OAuth2Api
+    private val oAuth2Api: OAuth2Api,
+    private val clientRegistrationRepository: ClientRegistrationRepository,
 ) {
     @GetMapping
     fun apiV1LoginGet(
-            @RequestParam("login_challenge") loginChallenge: String?,
-            csrfToken: CsrfToken,
-            response: HttpServletResponse?
+        @RequestParam("login_challenge") loginChallenge: String?,
+        csrfToken: CsrfToken,
+        response: HttpServletResponse?
     ): ApiV1LoginGetResponse {
+        val githubClient = clientRegistrationRepository.findByRegistrationId("github")
+        val authorizationRequest = OAuth2AuthorizationRequest.authorizationCode()
+            .clientId(githubClient.clientId)
+            .authorizationUri(githubClient.providerDetails.authorizationUri)
+            .redirectUri(githubClient.redirectUri)
+            .scopes(githubClient.scopes)
+            .state("state")
+            .additionalParameters(Collections.emptyMap())
+            .build()
+
         // 以下のバグが修正されるまでスキップはできない
         // https://github.com/ory/hydra-client-java/issues/19
         return ApiV1LoginGetResponse(
-                csrfToken = csrfToken.token.toString(),
-                redirectTo = null
+            csrfToken = csrfToken.token.toString(),
+            redirectTo = null,
+            githubLoginUrl = authorizationRequest.authorizationRequestUri
         )
 
 //        if (loginChallenge == null) {

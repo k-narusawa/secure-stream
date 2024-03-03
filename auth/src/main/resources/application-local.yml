@@ -9,6 +9,19 @@ spring:
     locations: "classpath:db/migrate"
   jpa:
     show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+            scope: user:email
+            redirectUri: http://localhost:8081/api/v1/users/social_login/login/code/github
+        provider:
+          github:
+            authorizationUri: https://github.com/login/oauth/authorize
+            tokenUri: https://github.com/login/oauth/access_token
 
 env:
   cors:
