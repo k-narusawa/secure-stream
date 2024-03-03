@@ -31,7 +31,7 @@ class ConnectSocialLoginService(
 
     private fun connectGithub(state: State, code: String) {
         val client = clientRegistrationRepository.findByRegistrationId("github")
-        
+
         val res = githubWebClient.loginOauthAccessToken(
             clientId = client.clientId,
             clientSecret = client.clientSecret,
@@ -40,6 +40,7 @@ class ConnectSocialLoginService(
         )
 
         val socialLoginState = socialLoginStateRepository.findByState(state = state)
+        socialLoginState.validate()
         socialLoginStateRepository.deleteByState(state = state)
 
         val githubUser = gitHubApiWebClient.user(accessToken = res.accessToken)

@@ -5,6 +5,8 @@ import com.knarusawa.api.application.connectSocialLogin.ConnectSocialLoginInputD
 import com.knarusawa.api.application.connectSocialLogin.ConnectSocialLoginService
 import com.knarusawa.api.application.deleteWebauthn.DeleteWebauthnInputData
 import com.knarusawa.api.application.deleteWebauthn.DeleteWebauthnService
+import com.knarusawa.api.application.disconnectSocialLogin.DisconnectSocialLoginInputData
+import com.knarusawa.api.application.disconnectSocialLogin.DisconnectSocialLoginService
 import com.knarusawa.api.application.getSocialLoginUrls.GetSocialLoginUrlsInputData
 import com.knarusawa.api.application.getSocialLoginUrls.GetSocialLoginUrlsService
 import com.knarusawa.api.application.registerWebauthn.RegisterWebauthnInputData
@@ -34,6 +36,7 @@ class RestApiController(
     private val deleteWebauthnService: DeleteWebauthnService,
     private val getSocialLoginUrlsService: GetSocialLoginUrlsService,
     private val connectSocialLoginService: ConnectSocialLoginService,
+    private val disconnectSocialLoginService: DisconnectSocialLoginService,
 ) : ApiSecureStream {
     companion object {
         private val log = logger()
@@ -163,6 +166,23 @@ class RestApiController(
             resHeaders.add("Location", "http://localhost:3000/error")
             return ResponseEntity(resHeaders, HttpStatus.FOUND)
         }
+    }
+
+    override fun deleteSocialLogin(
+        @PathVariable("provider") provider: String
+    ): ResponseEntity<Unit> {
+        val principal =
+            SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
+
+        val userId = principal?.getAttribute<String?>("sub")
+            ?: throw UnauthorizedException()
+
+        val inputData = DisconnectSocialLoginInputData(
+            userId = userId,
+            provider = provider
+        )
+        disconnectSocialLoginService.exec(inputData)
+        return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
 }

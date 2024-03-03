@@ -6,7 +6,8 @@ enum class Provider(val value: String) {
     ;
 
     companion object {
-        fun from(value: String) = Provider.valueOf(value = value)
+        fun from(value: String) = entries.find { it.value == value }
+            ?: throw IllegalStateException("想定外のプロバイダです")
     }
 
     fun value() = this.value
