@@ -2,8 +2,11 @@ package com.knarusawa.secure_stream.adapter.middleware
 
 import com.knarusawa.common.domain.user.UserRepository
 import com.knarusawa.secure_stream.adapter.exception.AuthenticationFailedException
+import com.knarusawa.secure_stream.adapter.middleware.dto.SocialLoginAuthenticationToken
 import com.knarusawa.secure_stream.adapter.middleware.dto.WebauthnAssertionAuthenticationToken
 import com.knarusawa.secure_stream.application.service.LoginUserDetailsService
+import com.knarusawa.secure_stream.application.service.authenticateSocialLogin.AuthenticateSocialLoginInputData
+import com.knarusawa.secure_stream.application.service.authenticateSocialLogin.AuthenticateSocialLoginService
 import com.knarusawa.secure_stream.application.service.completeWebauthnLogin.CompleteWebauthnLoginService
 import com.knarusawa.secure_stream.domain.LoginUserDetails
 import org.springframework.security.authentication.AbstractAuthenticationToken
@@ -14,10 +17,11 @@ import org.springframework.stereotype.Component
 
 @Component
 class AuthenticationProvider(
-        private val userRepository: UserRepository,
-        private val completeWebauthnLoginService: CompleteWebauthnLoginService,
-        private val loginUserDetailsService: LoginUserDetailsService,
-        private val passwordEncoder: PasswordEncoder,
+    private val userRepository: UserRepository,
+    private val completeWebauthnLoginService: CompleteWebauthnLoginService,
+    private val loginUserDetailsService: LoginUserDetailsService,
+    private val authenticateSocialLoginService: AuthenticateSocialLoginService,
+    private val passwordEncoder: PasswordEncoder,
 ) : org.springframework.security.authentication.AuthenticationProvider {
     override fun supports(authentication: Class<*>?): Boolean {
         return AbstractAuthenticationToken::class.java.isAssignableFrom(authentication)
@@ -28,13 +32,27 @@ class AuthenticationProvider(
             val outputData = completeWebauthnLoginService.exec(authentication.credentials)
 
             val user = userRepository.findByUserId(userId = outputData.userId)
-                    ?: throw AuthenticationFailedException("ユーザーの識別に失敗しました")
+                ?: throw AuthenticationFailedException("ユーザーの識別に失敗しました")
 
             val loginUser = LoginUserDetails(user)
 
             return UsernamePasswordAuthenticationToken(loginUser, null)
+        } else if (authentication is SocialLoginAuthenticationToken) {
+            val inputData = AuthenticateSocialLoginInputData(
+                provider = authentication.principal.provider,
+                state = authentication.principal.state,
+                code = authentication.credentials,
+            )
+            val outputData = authenticateSocialLoginService.exec(inputData)
+
+            val user = userRepository.findByUserId(userId = outputData.userId)
+                ?: throw AuthenticationFailedException("ユーザーの識別に失敗しました")
+
+            val loginUser = LoginUserDetails(user)
+            
+            return UsernamePasswordAuthenticationToken(loginUser, null)
         }
-        
+
         val username = authentication.principal as String
         val password = authentication.credentials as String
 

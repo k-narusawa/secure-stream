@@ -44,7 +44,7 @@ class ConnectSocialLoginService(
         socialLoginStateRepository.deleteByState(state = state)
 
         val githubUser = gitHubApiWebClient.user(accessToken = res.accessToken)
-        val socialLogin = SocialLogin.of(userId = socialLoginState.userId, provider = Provider.GITHUB, sub = githubUser.id.toString())
+        val socialLogin = SocialLogin.of(userId = socialLoginState.userId!!, provider = Provider.GITHUB, sub = githubUser.id.toString())
 
         socialLoginRepository.save(socialLogin)
     }

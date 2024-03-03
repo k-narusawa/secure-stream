@@ -15,7 +15,10 @@ data class SocialLoginStateRecord(
     val state: String = "",
 
     @Column(name = "user_id")
-    val userId: String = "",
+    val userId: String? = null,
+
+    @Column(name = "challenge")
+    val challenge: String? = null,
 
     @Column(name = "expired_at")
     val expiredAt: LocalDateTime = LocalDateTime.now(),
@@ -29,7 +32,8 @@ data class SocialLoginStateRecord(
     companion object {
         fun from(socialLoginState: SocialLoginState) = SocialLoginStateRecord(
             state = socialLoginState.state.value,
-            userId = socialLoginState.userId.value(),
+            userId = socialLoginState.userId?.value(),
+            challenge = socialLoginState.challenge,
             expiredAt = socialLoginState.expiredAt,
         )
     }

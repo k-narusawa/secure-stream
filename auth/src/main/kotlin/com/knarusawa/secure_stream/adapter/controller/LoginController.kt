@@ -1,5 +1,7 @@
 package com.knarusawa.secure_stream.adapter.controller
 
+import com.knarusawa.common.domain.socialLoginState.SocialLoginState
+import com.knarusawa.common.domain.socialLoginState.SocialLoginStateRepository
 import com.knarusawa.secure_stream.adapter.controller.response.ApiV1LoginGetResponse
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
@@ -17,6 +19,7 @@ import java.util.*
 @RequestMapping("/api/v1/login")
 class LoginController(
     private val oAuth2Api: OAuth2Api,
+    private val socialLoginStateRepository: SocialLoginStateRepository,
     private val clientRegistrationRepository: ClientRegistrationRepository,
 ) {
     @GetMapping
@@ -25,22 +28,33 @@ class LoginController(
         csrfToken: CsrfToken,
         response: HttpServletResponse?
     ): ApiV1LoginGetResponse {
-        val githubClient = clientRegistrationRepository.findByRegistrationId("github")
-        val authorizationRequest = OAuth2AuthorizationRequest.authorizationCode()
-            .clientId(githubClient.clientId)
-            .authorizationUri(githubClient.providerDetails.authorizationUri)
-            .redirectUri(githubClient.redirectUri)
-            .scopes(githubClient.scopes)
-            .state("state")
-            .additionalParameters(Collections.emptyMap())
-            .build()
+        if (loginChallenge != null) {
+            val githubClient = clientRegistrationRepository.findByRegistrationId("github")
+            val socialLoginState = SocialLoginState.of(challenge = loginChallenge)
+            socialLoginStateRepository.save(socialLoginState)
+
+            val authorizationRequest = OAuth2AuthorizationRequest.authorizationCode()
+                .clientId(githubClient.clientId)
+                .authorizationUri(githubClient.providerDetails.authorizationUri)
+                .redirectUri(githubClient.redirectUri)
+                .scopes(githubClient.scopes)
+                .state(socialLoginState.state.value)
+                .additionalParameters(Collections.emptyMap())
+                .build()
+
+            return ApiV1LoginGetResponse(
+                csrfToken = csrfToken.token.toString(),
+                redirectTo = null,
+                githubLoginUrl = authorizationRequest.authorizationRequestUri
+            )
+        }
 
         // 以下のバグが修正されるまでスキップはできない
         // https://github.com/ory/hydra-client-java/issues/19
         return ApiV1LoginGetResponse(
             csrfToken = csrfToken.token.toString(),
             redirectTo = null,
-            githubLoginUrl = authorizationRequest.authorizationRequestUri
+            githubLoginUrl = null
         )
 
 //        if (loginChallenge == null) {
