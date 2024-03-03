@@ -6,6 +6,7 @@ type UserInfo {
   userId: String
   user: User
   profile: Profile
+  socialLogin: SocialLogin
 }
 
 type User{
@@ -20,6 +21,11 @@ type Profile {
   givenName: String
   nickname: String
   picture: String
+}
+
+type SocialLogin{
+  google: Boolean
+  github: Boolean
 }
 
 type Mutation {

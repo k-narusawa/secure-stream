@@ -135,16 +135,8 @@ class RestApiController(
 
         return ResponseEntity.ok(
             SocialLoginUrls(
-                urls = outputData.urls.map {
-                    SocialLoginUrlsUrlsInner(
-                        provider = when (it.provider) {
-                            "github" -> Provider.github
-                            "google" -> Provider.google
-                            else -> throw RuntimeException("想定外のプロバイダです")
-                        },
-                        url = it.url
-                    )
-                }
+                google = outputData.google,
+                github = outputData.github
             )
         )
     }
