@@ -1,29 +1,44 @@
 package com.knarusawa.api.adapter.controller
 
 import com.knarusawa.api.adapter.exception.UnauthorizedException
+import com.knarusawa.api.application.connectSocialLogin.ConnectSocialLoginInputData
+import com.knarusawa.api.application.connectSocialLogin.ConnectSocialLoginService
 import com.knarusawa.api.application.deleteWebauthn.DeleteWebauthnInputData
 import com.knarusawa.api.application.deleteWebauthn.DeleteWebauthnService
+import com.knarusawa.api.application.getSocialLoginUrls.GetSocialLoginUrlsInputData
+import com.knarusawa.api.application.getSocialLoginUrls.GetSocialLoginUrlsService
 import com.knarusawa.api.application.registerWebauthn.RegisterWebauthnInputData
 import com.knarusawa.api.application.registerWebauthn.RegisterWebauthnService
 import com.knarusawa.api.application.requestWebauthn.RequestWebauthnInputData
 import com.knarusawa.api.application.requestWebauthn.RequestWebauthnService
 import com.knarusawa.common.domain.flow.FlowId
 import com.knarusawa.common.domain.user.UserId
+import com.knarusawa.common.util.logger
 import com.webauthn4j.util.Base64UrlUtil
+import org.jetbrains.annotations.NotNull
 import org.openapitools.api.ApiSecureStream
 import org.openapitools.model.*
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class WebauthnController(
+class RestApiController(
     private val requestWebauthnService: RequestWebauthnService,
     private val registerWebauthnService: RegisterWebauthnService,
     private val deleteWebauthnService: DeleteWebauthnService,
+    private val getSocialLoginUrlsService: GetSocialLoginUrlsService,
+    private val connectSocialLoginService: ConnectSocialLoginService,
 ) : ApiSecureStream {
+    companion object {
+        private val log = logger()
+    }
+
     override fun requestWebauthnRegistration(): ResponseEntity<RequestWebauthnRegistration> {
         val principal =
             SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
@@ -108,6 +123,54 @@ class WebauthnController(
         deleteWebauthnService.exec(inputData = DeleteWebauthnInputData(userId = UserId.from(userId)))
 
         return ResponseEntity(HttpStatus.OK)
+    }
+
+    override fun getSocialLoginUrl(): ResponseEntity<SocialLoginUrls> {
+        val principal =
+            SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
+        val userId = principal?.getAttribute<String?>("sub")
+            ?: throw UnauthorizedException()
+
+        val outputData = getSocialLoginUrlsService.exec(GetSocialLoginUrlsInputData(userId = userId))
+
+        return ResponseEntity.ok(
+            SocialLoginUrls(
+                urls = outputData.urls.map {
+                    SocialLoginUrlsUrlsInner(
+                        provider = when (it.provider) {
+                            "github" -> Provider.github
+                            "google" -> Provider.google
+                            else -> throw RuntimeException("想定外のプロバイダです")
+                        },
+                        url = it.url
+                    )
+                }
+            )
+        )
+    }
+
+    override fun requestAuthorizationCode(
+        @PathVariable("provider") provider: String,
+        @NotNull @RequestParam(value = "code", required = true) code: String,
+        @RequestParam(value = "state", required = false) state: String?
+    ): ResponseEntity<Unit> {
+        if (state == null) throw RuntimeException("stateが存在しません")
+
+        val resHeaders = HttpHeaders()
+        try {
+            val inputData = ConnectSocialLoginInputData(userId = "userId", provider = provider, code = code, state = state)
+            connectSocialLoginService.exec(inputData = inputData)
+
+            resHeaders.add("Location", "http://localhost:3000/account/social_login/complete")
+            return ResponseEntity(resHeaders, HttpStatus.FOUND)
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+
+            log.error("${ex.message}")
+
+            resHeaders.add("Location", "http://localhost:3000/error")
+            return ResponseEntity(resHeaders, HttpStatus.FOUND)
+        }
     }
 
 }

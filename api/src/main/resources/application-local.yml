@@ -4,6 +4,19 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: 6ac3447b6de2d34489c2
+            clientSecret: 9854bfdb5dee234e17c28414e5c0050022629cbc
+            scope: user:email
+            redirectUri: http://localhost:8081/api/v1/users/social_login/code/github
+        provider:
+          github:
+            authorizationUri: https://github.com/login/oauth/authorize
+            tokenUri: https://github.com/login/oauth/access_token
 
 env:
   cors:
@@ -11,3 +24,6 @@ env:
   webauthn:
     rp:
       id: localhost
+  url:
+    auth-front: http://localhost:3001
+    sp-front: http://localhost:3000

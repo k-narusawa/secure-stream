@@ -20,6 +20,7 @@ class SecurityConfig {
             it.configurationSource(this.corsConfigurationSource())
         }
         http.authorizeHttpRequests {
+            it.requestMatchers("/api/v1/users/social_login/code/**").permitAll()
             it.anyRequest().authenticated()
         }
         http.oauth2ResourceServer {

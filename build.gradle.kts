@@ -40,7 +40,7 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-maven-noarg")
         implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
         implementation("org.springframework.boot:spring-boot-starter-security")
-        implementation("org.springframework.security:spring-security-config:6.2.1")
+        implementation("org.springframework.security:spring-security-config")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("com.webauthn4j:webauthn4j-core:0.22.1.RELEASE")
 
@@ -110,6 +110,7 @@ project(":api") {
         implementation("com.auth0:java-jwt:4.4.0")
         implementation("org.springframework.security:spring-security-oauth2-resource-server")
         implementation("org.springframework.security:spring-security-oauth2-jose")
+        implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
         implementation("org.springframework.graphql:spring-graphql:1.2.4")
         implementation(project(":common"))
         implementation(project(":secure-stream-openapi:kotlin-spring"))
