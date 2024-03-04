@@ -16,14 +16,18 @@ import java.time.LocalDateTime
 
 @Component
 class AuthenticationSuccessHandler(
-        private val loginCompleteService: LoginCompleteService,
-        private val oAuth2Api: OAuth2Api,
+    private val loginCompleteService: LoginCompleteService,
+    private val oAuth2Api: OAuth2Api,
 ) : org.springframework.security.web.authentication.AuthenticationSuccessHandler {
     companion object {
         private val log = logger()
     }
 
-    override fun onAuthenticationSuccess(request: HttpServletRequest?, response: HttpServletResponse?, authentication: Authentication?) {
+    override fun onAuthenticationSuccess(
+        request: HttpServletRequest?,
+        response: HttpServletResponse?,
+        authentication: Authentication?
+    ) {
         val user = authentication?.principal as LoginUserDetails
         log.info("認証成功 user_id: [${user.userId.value()}]")
 
@@ -38,20 +42,27 @@ class AuthenticationSuccessHandler(
             val req = AcceptOAuth2LoginRequest().subject(user.userId.value())
             val res = oAuth2Api.acceptOAuth2LoginRequest(loginChallenge, req)
 
+            if (request.requestURI == "/api/v1/login/social_login") {
+                response?.sendRedirect(res.redirectTo)
+                return
+            }
+
             response?.setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             response?.writer?.println(
-                    "{ \"redirect_to\": \"${res.redirectTo}\"}"
+                "{ \"redirect_to\": \"${res.redirectTo}\"}"
             )
 
             return
         }
 
-        loginCompleteService.execute(inputData = LoginCompleteInputData(
+        loginCompleteService.execute(
+            inputData = LoginCompleteInputData(
                 username = user.username,
                 remoteAddr = request?.remoteAddr ?: "",
                 userAgent = request?.getHeader("User-Agent") ?: "",
                 time = LocalDateTime.now()
-        ))
+            )
+        )
 
         response?.status = HttpServletResponse.SC_OK
     }

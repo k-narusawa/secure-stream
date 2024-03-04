@@ -9,8 +9,8 @@ spring:
       client:
         registration:
           github:
-            clientId: 6ac3447b6de2d34489c2
-            clientSecret: 9854bfdb5dee234e17c28414e5c0050022629cbc
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
             scope: user:email
             redirectUri: http://localhost:8081/api/v1/users/social_login/code/github
         provider:

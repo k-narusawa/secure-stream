@@ -21,6 +21,7 @@ class SecurityConfig {
         }
         http.authorizeHttpRequests {
             it.requestMatchers("/api/v1/users/social_login/code/**").permitAll()
+            it.requestMatchers("/api/v1/users/social_login/login/code/**").permitAll()
             it.anyRequest().authenticated()
         }
         http.oauth2ResourceServer {

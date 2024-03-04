@@ -17,14 +17,15 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class AuthorizeFilter(
-        private val userRepository: UserRepository
+    private val userRepository: UserRepository
 ) : OncePerRequestFilter() {
     companion object {
         private val matchers = listOf(
-                AntPathRequestMatcher("/api/v1/login"),
-                AntPathRequestMatcher("/api/v1/login/webauthn"),
-                AntPathRequestMatcher("/api/v1/login/webauthn/request"),
-                AntPathRequestMatcher("/api/v1/csrf"),
+            AntPathRequestMatcher("/api/v1/login"),
+            AntPathRequestMatcher("/api/v1/login/webauthn"),
+            AntPathRequestMatcher("/api/v1/login/webauthn/request"),
+            AntPathRequestMatcher("/api/v1/login/social_login"),
+            AntPathRequestMatcher("/api/v1/csrf"),
         )
         private val combinedMatcher = OrRequestMatcher(matchers)
         private val log = logger()
@@ -34,7 +35,7 @@ class AuthorizeFilter(
         log.info("AuthorizeFilter")
         if (!combinedMatcher.matches(request)) {
             val user = request.session.getAttribute("user") as? LoginUserDetails
-                    ?: throw InvalidRequestStateException("想定外の認証エラー")
+                ?: throw InvalidRequestStateException("想定外の認証エラー")
 
             SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(user, null, ArrayList())
         }

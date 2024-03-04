@@ -28,6 +28,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.util.UriComponentsBuilder
 
 @RestController
 class RestApiController(
@@ -185,4 +186,22 @@ class RestApiController(
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 
+    override fun requestAuthorizationCodeForLogin(
+        @PathVariable("provider") provider: kotlin.String,
+        @NotNull @RequestParam(value = "code", required = true) code: String,
+        @RequestParam(value = "state", required = false) state: String?,
+        @RequestParam(value = "login_challenge", required = false) loginChallenge: String?,
+    ): ResponseEntity<Unit> {
+        val resHeaders = HttpHeaders()
+        val url = UriComponentsBuilder
+            .fromUriString("http://localhost:8080")
+            .path("/api/v1/login/social_login")
+            .query("provider=${provider}")
+            .query("code=${code}")
+            .query("state=${state}")
+            .query("login_challenge=${loginChallenge}")
+            .build().toString()
+        resHeaders.add("Location", url)
+        return ResponseEntity(resHeaders, HttpStatus.FOUND)
+    }
 }

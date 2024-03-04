@@ -5,5 +5,6 @@ import org.springframework.data.repository.CrudRepository
 
 interface SocialLoginRecordDao : CrudRepository<SocialLoginRecord, String> {
     fun findByUserId(userId: String): List<SocialLoginRecord>
+    fun findBySubAndProvider(sub: String, provider: String): SocialLoginRecord?
     fun deleteByUserIdAndProvider(userId: String, provider: String)
 }

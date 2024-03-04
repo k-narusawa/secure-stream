@@ -23,6 +23,11 @@ class SocialLoginRepositoryImpl(
         return records.map { SocialLogin.from(record = it) }
     }
 
+    override fun findBySubAndProvider(sub: String, provider: Provider): SocialLogin? {
+        val record = socialLoginRecordDao.findBySubAndProvider(sub = sub, provider = provider.value())
+        return record?.let { SocialLogin.from(record) }
+    }
+
     override fun deleteByUserIdAndProvider(userId: UserId, provider: Provider) {
         socialLoginRecordDao.deleteByUserIdAndProvider(
             userId = userId.value(),

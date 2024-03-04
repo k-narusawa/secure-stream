@@ -75,6 +75,7 @@ project(":auth") {
         implementation("sh.ory.hydra:hydra-client:2.2.0")
         implementation("org.flywaydb:flyway-core:9.22.3")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
         implementation(project(":common"))
 
         runtimeOnly("org.postgresql:postgresql:42.7.1")

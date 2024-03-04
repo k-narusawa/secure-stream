@@ -1,5 +1,6 @@
 package com.knarusawa.secure_stream.config
 
+import com.knarusawa.common.domain.socialLoginState.SocialLoginStateRepository
 import com.knarusawa.secure_stream.adapter.middleware.AuthenticationFailureHandler
 import com.knarusawa.secure_stream.adapter.middleware.AuthenticationFilter
 import com.knarusawa.secure_stream.adapter.middleware.AuthenticationSuccessHandler
@@ -33,6 +34,9 @@ class SecurityConfig {
     private lateinit var authorizeFilter: AuthorizeFilter
 
     @Autowired
+    private lateinit var socialLoginStateRepository: SocialLoginStateRepository
+
+    @Autowired
     private lateinit var environments: Environments
 
     @Bean
@@ -45,7 +49,13 @@ class SecurityConfig {
             it.csrfTokenRepository(CookieCsrfTokenRepository())
         }
         http.authorizeHttpRequests {
-            it.requestMatchers("/api/v1/csrf", "/api/v1/login", "/api/v1/login/webauthn", "/api/v1/login/webauthn/request").permitAll()
+            it.requestMatchers(
+                "/api/v1/csrf",
+                "/api/v1/login",
+                "/api/v1/login/webauthn",
+                "/api/v1/login/webauthn/request",
+                "/api/v1/login/social_login"
+            ).permitAll()
             it.anyRequest().authenticated()
         }
         http.addFilterBefore(authorizeFilter, UsernamePasswordAuthenticationFilter::class.java)
@@ -55,10 +65,11 @@ class SecurityConfig {
 
     @Bean
     fun authenticationFilter(): UsernamePasswordAuthenticationFilter {
-        val filter = AuthenticationFilter(authenticationManager())
+        val filter = AuthenticationFilter(authenticationManager(), socialLoginStateRepository)
         filter.setRequiresAuthenticationRequestMatcher {
             (it.method == "POST" && it.requestURI == "/api/v1/login") or
-                    (it.method == "POST" && it.requestURI == "/api/v1/login/webauthn")
+                (it.method == "POST" && it.requestURI == "/api/v1/login/webauthn") or
+                (it.method == "GET" && it.requestURI == "/api/v1/login/social_login")
         }
         filter.setAuthenticationManager(authenticationManager())
         filter.setAuthenticationSuccessHandler(authenticationSuccessHandler)
