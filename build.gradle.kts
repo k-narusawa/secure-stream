@@ -66,6 +66,10 @@ subprojects {
 project(":auth") {
     version = "0.0.1"
 
+    apply {
+        plugin("org.flywaydb.flyway")
+    }
+
     repositories {
         mavenCentral()
     }
@@ -99,6 +103,13 @@ project(":auth") {
             image = "registry.hub.docker.com/19992240/secure-stream-auth"
             tags = setOf("${project.version}", "latest")
         }
+    }
+
+    flyway {
+        url = "jdbc:postgresql://127.0.0.1:5432/secure_stream"
+        user = "postgres"
+        password = "postgres"
+        cleanDisabled = false
     }
 }
 
