@@ -49,7 +49,7 @@ class AuthenticationProvider(
                 ?: throw AuthenticationFailedException("ユーザーの識別に失敗しました")
 
             val loginUser = LoginUserDetails(user)
-            
+
             return UsernamePasswordAuthenticationToken(loginUser, null)
         }
 

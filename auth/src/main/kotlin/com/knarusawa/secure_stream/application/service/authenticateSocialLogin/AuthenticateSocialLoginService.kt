@@ -4,6 +4,8 @@ import com.knarusawa.common.adapter.gateway.api.GitHubApiWebClient
 import com.knarusawa.common.adapter.gateway.api.GitHubWebClient
 import com.knarusawa.common.domain.socialLogin.Provider
 import com.knarusawa.common.domain.socialLogin.SocialLoginRepository
+import com.knarusawa.common.domain.socialLoginState.SocialLoginStateRepository
+import com.knarusawa.common.domain.socialLoginState.State
 import com.knarusawa.secure_stream.application.exception.UserNotFoundException
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.stereotype.Service
@@ -15,9 +17,11 @@ class AuthenticateSocialLoginService(
     private val githubWebClient: GitHubWebClient,
     private val gitHubApiWebClient: GitHubApiWebClient,
     private val socialLoginRepository: SocialLoginRepository,
+    private val socialLoginStateRepository: SocialLoginStateRepository
 ) {
     @Transactional
     fun exec(inputData: AuthenticateSocialLoginInputData): AuthenticateSocialLoginOutputData {
+        socialLoginStateRepository.deleteByState(State.from(inputData.state))
         return when (inputData.provider) {
             "github" -> checkGitHub(inputData.code)
             else -> throw IllegalStateException("想定外のプロバイダです")
@@ -34,7 +38,10 @@ class AuthenticateSocialLoginService(
         )
 
         val githubUser = gitHubApiWebClient.user(res.accessToken)
-        val socialLogin = socialLoginRepository.findBySubAndProvider(sub = githubUser.id.toString(), provider = Provider.GITHUB)
+        val socialLogin = socialLoginRepository.findBySubAndProvider(
+            sub = githubUser.id.toString(),
+            provider = Provider.GITHUB
+        )
             ?: throw UserNotFoundException("SocialLoginに紐づくユーザーが見つかりませんでした")
 
         return AuthenticateSocialLoginOutputData(

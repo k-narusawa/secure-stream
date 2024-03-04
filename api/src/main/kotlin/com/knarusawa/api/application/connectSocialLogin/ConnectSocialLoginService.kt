@@ -24,7 +24,11 @@ class ConnectSocialLoginService(
     @Transactional
     fun exec(inputData: ConnectSocialLoginInputData) {
         when (inputData.provider) {
-            "github" -> connectGithub(state = State.from(value = inputData.state), code = inputData.code)
+            "github" -> connectGithub(
+                state = State.from(value = inputData.state),
+                code = inputData.code
+            )
+
             else -> throw RuntimeException("想定外のプロバイダです")
         }
     }
@@ -40,11 +44,15 @@ class ConnectSocialLoginService(
         )
 
         val socialLoginState = socialLoginStateRepository.findByState(state = state)
-        socialLoginState.validate()
+        socialLoginState.isValid()
         socialLoginStateRepository.deleteByState(state = state)
 
         val githubUser = gitHubApiWebClient.user(accessToken = res.accessToken)
-        val socialLogin = SocialLogin.of(userId = socialLoginState.userId!!, provider = Provider.GITHUB, sub = githubUser.id.toString())
+        val socialLogin = SocialLogin.of(
+            userId = socialLoginState.userId!!,
+            provider = Provider.GITHUB,
+            sub = githubUser.id.toString()
+        )
 
         socialLoginRepository.save(socialLogin)
     }

@@ -30,7 +30,8 @@ class AuthenticationFilter(
     init {
         this.customSecurityContextRepository = DelegatingSecurityContextRepository(
             RequestAttributeSecurityContextRepository(),
-            HttpSessionSecurityContextRepository())
+            HttpSessionSecurityContextRepository()
+        )
         super.setSecurityContextRepository(customSecurityContextRepository)
     }
 
@@ -75,6 +76,11 @@ class AuthenticationFilter(
             val code = request.getParameter("code")
             val state = request.getParameter("state")
             val socialLoginState = socialLoginStateRepository.findByState(State.from(state))
+
+            if (!socialLoginState.isValid()) {
+                throw IllegalStateException("state is invalid")
+            }
+
             request.setAttribute("login_challenge", socialLoginState.challenge)
 
             val principal = SocialLoginAuthenticationToken.SocialLoginPrincipal(

@@ -38,7 +38,7 @@ class SocialLoginState private constructor(
         )
     }
 
-    fun validate(): Boolean {
+    fun isValid(): Boolean {
         return this.expiredAt >= LocalDateTime.now()
     }
 }
