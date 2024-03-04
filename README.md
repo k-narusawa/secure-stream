@@ -22,3 +22,8 @@ code .git/modules/secure-stream-openapi/info/sparse-checkout
 
 git -C secure-stream-openapi read-tree -mu HEAD
 ```
+
+## OpenAPIのRedoc
+
+[リポジトリ](https://github.com/k-narusawa/secure-stream-openapi?tab=readme-ov-file)
+[ReDoc](https://k-narusawa.github.io/secure-stream-openapi/)
