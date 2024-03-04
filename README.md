@@ -6,6 +6,12 @@
 
 [secure-stream-front](https://github.com/k-narusawa/secure-stream-front/tree/main)のバックエンド部分
 
+### 機能
+
+* ログイン認証
+* ソーシャルログインによる認証
+* PassKeyによる認証
+
 ## 初期設定
 
 * サブモジュールの設定
@@ -26,4 +32,5 @@ git -C secure-stream-openapi read-tree -mu HEAD
 ## OpenAPIのRedoc
 
 [リポジトリ](https://github.com/k-narusawa/secure-stream-openapi)
+
 [ReDoc](https://k-narusawa.github.io/secure-stream-openapi)
