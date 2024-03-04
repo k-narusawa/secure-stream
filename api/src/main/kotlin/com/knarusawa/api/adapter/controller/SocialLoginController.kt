@@ -1,12 +1,12 @@
 package com.knarusawa.api.adapter.controller
 
 import com.knarusawa.api.adapter.exception.UnauthorizedException
-import com.knarusawa.api.application.connectSocialLogin.ConnectSocialLoginInputData
-import com.knarusawa.api.application.connectSocialLogin.ConnectSocialLoginService
-import com.knarusawa.api.application.disconnectSocialLogin.DisconnectSocialLoginInputData
-import com.knarusawa.api.application.disconnectSocialLogin.DisconnectSocialLoginService
-import com.knarusawa.api.application.getSocialLoginUrls.GetSocialLoginUrlsInputData
-import com.knarusawa.api.application.getSocialLoginUrls.GetSocialLoginUrlsService
+import com.knarusawa.api.application.service.connectSocialLogin.ConnectSocialLoginInputData
+import com.knarusawa.api.application.service.connectSocialLogin.ConnectSocialLoginService
+import com.knarusawa.api.application.service.disconnectSocialLogin.DisconnectSocialLoginInputData
+import com.knarusawa.api.application.service.disconnectSocialLogin.DisconnectSocialLoginService
+import com.knarusawa.api.application.service.getSocialLoginUrls.GetSocialLoginUrlsInputData
+import com.knarusawa.api.application.service.getSocialLoginUrls.GetSocialLoginUrlsService
 import com.knarusawa.common.util.logger
 import org.jetbrains.annotations.NotNull
 import org.openapitools.api.SocialLoginApi

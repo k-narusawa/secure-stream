@@ -1,7 +1,7 @@
 package com.knarusawa.api.adapter.service
 
-import com.knarusawa.api.application.dto.SocialLoginDto
-import com.knarusawa.api.application.query.SocialLoginDtoQueryService
+import com.knarusawa.api.application.service.dto.SocialLoginDto
+import com.knarusawa.api.application.service.query.SocialLoginDtoQueryService
 import com.knarusawa.common.adapter.gateway.dao.SocialLoginRecordDao
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

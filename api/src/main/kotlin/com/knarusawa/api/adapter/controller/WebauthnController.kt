@@ -1,15 +1,15 @@
 package com.knarusawa.api.adapter.controller
 
 import com.knarusawa.api.adapter.exception.UnauthorizedException
-import com.knarusawa.api.application.connectSocialLogin.ConnectSocialLoginService
-import com.knarusawa.api.application.deleteWebauthn.DeleteWebauthnInputData
-import com.knarusawa.api.application.deleteWebauthn.DeleteWebauthnService
-import com.knarusawa.api.application.disconnectSocialLogin.DisconnectSocialLoginService
-import com.knarusawa.api.application.getSocialLoginUrls.GetSocialLoginUrlsService
-import com.knarusawa.api.application.registerWebauthn.RegisterWebauthnInputData
-import com.knarusawa.api.application.registerWebauthn.RegisterWebauthnService
-import com.knarusawa.api.application.requestWebauthn.RequestWebauthnInputData
-import com.knarusawa.api.application.requestWebauthn.RequestWebauthnService
+import com.knarusawa.api.application.service.connectSocialLogin.ConnectSocialLoginService
+import com.knarusawa.api.application.service.deleteWebauthn.DeleteWebauthnInputData
+import com.knarusawa.api.application.service.deleteWebauthn.DeleteWebauthnService
+import com.knarusawa.api.application.service.disconnectSocialLogin.DisconnectSocialLoginService
+import com.knarusawa.api.application.service.getSocialLoginUrls.GetSocialLoginUrlsService
+import com.knarusawa.api.application.service.registerWebauthn.RegisterWebauthnInputData
+import com.knarusawa.api.application.service.registerWebauthn.RegisterWebauthnService
+import com.knarusawa.api.application.service.requestWebauthn.RequestWebauthnInputData
+import com.knarusawa.api.application.service.requestWebauthn.RequestWebauthnService
 import com.knarusawa.common.domain.flow.FlowId
 import com.knarusawa.common.domain.user.UserId
 import com.knarusawa.common.util.logger

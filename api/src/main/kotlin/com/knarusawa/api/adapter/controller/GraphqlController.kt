@@ -5,12 +5,12 @@ import com.knarusawa.api.adapter.controller.dto.SocialLogin
 import com.knarusawa.api.adapter.controller.dto.User
 import com.knarusawa.api.adapter.controller.dto.UserInfo
 import com.knarusawa.api.adapter.exception.UnauthorizedException
-import com.knarusawa.api.application.changeProfile.ChangeProfileInputData
-import com.knarusawa.api.application.changeProfile.ChangeProfileService
-import com.knarusawa.api.application.query.ProfileDtoQueryService
-import com.knarusawa.api.application.query.SocialLoginDtoQueryService
-import com.knarusawa.api.application.query.UserDtoQueryService
-import com.knarusawa.api.application.query.WebauthnCredentialsDtoQueryService
+import com.knarusawa.api.application.service.changeProfile.ChangeProfileInputData
+import com.knarusawa.api.application.service.changeProfile.ChangeProfileService
+import com.knarusawa.api.application.service.query.ProfileDtoQueryService
+import com.knarusawa.api.application.service.query.SocialLoginDtoQueryService
+import com.knarusawa.api.application.service.query.UserDtoQueryService
+import com.knarusawa.api.application.service.query.WebauthnCredentialsDtoQueryService
 import com.knarusawa.common.domain.user.UserId
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
@@ -47,7 +47,8 @@ class GraphqlController(
         val user = userDtoQueryService.findByUserId(userInfo.userId)
             ?: throw UnauthorizedException()
 
-        val webauthnCredentials = webauthnCredentialsDtoQueryService.findByUserId(userId = UserId.from(userInfo.userId))
+        val webauthnCredentials =
+            webauthnCredentialsDtoQueryService.findByUserId(userId = UserId.from(userInfo.userId))
 
         return User(
             username = user.username,

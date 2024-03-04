@@ -1,7 +1,7 @@
 package com.knarusawa.api.adapter.service
 
-import com.knarusawa.api.application.dto.UserDto
-import com.knarusawa.api.application.query.UserDtoQueryService
+import com.knarusawa.api.application.service.dto.UserDto
+import com.knarusawa.api.application.service.query.UserDtoQueryService
 import com.knarusawa.common.adapter.gateway.dao.UserRecordDao
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
