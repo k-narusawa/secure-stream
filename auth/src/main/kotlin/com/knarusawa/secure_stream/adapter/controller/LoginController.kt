@@ -1,60 +1,38 @@
 package com.knarusawa.secure_stream.adapter.controller
 
-import com.knarusawa.common.domain.socialLoginState.SocialLoginState
-import com.knarusawa.common.domain.socialLoginState.SocialLoginStateRepository
 import com.knarusawa.secure_stream.adapter.controller.response.ApiV1LoginGetResponse
+import com.knarusawa.secure_stream.application.service.getSocialLoginUrls.GetSocialLoginUrlsInputData
+import com.knarusawa.secure_stream.application.service.getSocialLoginUrls.GetSocialLoginUrlsService
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
-import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest
 import org.springframework.security.web.csrf.CsrfToken
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import sh.ory.hydra.api.OAuth2Api
-import java.util.*
 
 
 @RestController
 @RequestMapping("/api/v1/login")
 class LoginController(
     private val oAuth2Api: OAuth2Api,
-    private val socialLoginStateRepository: SocialLoginStateRepository,
-    private val clientRegistrationRepository: ClientRegistrationRepository,
+    private val getSocialLoginUrlsService: GetSocialLoginUrlsService,
 ) {
     @GetMapping
     fun apiV1LoginGet(
-        @RequestParam("login_challenge") loginChallenge: String?,
+        @RequestParam("login_challenge") loginChallenge: String,
         csrfToken: CsrfToken,
         response: HttpServletResponse?
     ): ApiV1LoginGetResponse {
-        if (loginChallenge != null) {
-            val githubClient = clientRegistrationRepository.findByRegistrationId("github")
-            val socialLoginState = SocialLoginState.of(challenge = loginChallenge)
-            socialLoginStateRepository.save(socialLoginState)
-
-            val authorizationRequest = OAuth2AuthorizationRequest.authorizationCode()
-                .clientId(githubClient.clientId)
-                .authorizationUri(githubClient.providerDetails.authorizationUri)
-                .redirectUri(githubClient.redirectUri)
-                .scopes(githubClient.scopes)
-                .state(socialLoginState.state.value)
-                .additionalParameters(Collections.emptyMap())
-                .build()
-
-            return ApiV1LoginGetResponse(
-                csrfToken = csrfToken.token.toString(),
-                redirectTo = null,
-                githubLoginUrl = authorizationRequest.authorizationRequestUri
-            )
-        }
+        val outputData =
+            getSocialLoginUrlsService.exec(inputData = GetSocialLoginUrlsInputData(loginChallenge))
 
         // 以下のバグが修正されるまでスキップはできない
         // https://github.com/ory/hydra-client-java/issues/19
         return ApiV1LoginGetResponse(
             csrfToken = csrfToken.token.toString(),
             redirectTo = null,
-            githubLoginUrl = null
+            githubLoginUrl = outputData.githubUrl,
         )
 
 //        if (loginChallenge == null) {

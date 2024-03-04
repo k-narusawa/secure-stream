@@ -28,12 +28,12 @@ class CompleteWebauthnLoginService(
     companion object {
         private val log = logger()
         private const val PR_ID = "localhost"
-        private val attestedCredentialDataConverter = AttestedCredentialDataConverter(ObjectConverter())
+        private val attestedCredentialDataConverter =
+            AttestedCredentialDataConverter(ObjectConverter())
     }
 
     @Transactional
     fun exec(inputData: CompleteWebauthnLoginInputData): CompleteWebauthnLoginOutputData {
-        println(inputData)
         val userId = inputData.userHandle?.let { UserId.from(it) }
             ?: throw UserNotFoundException("ユーザーの識別に失敗しました")
 
