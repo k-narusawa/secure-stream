@@ -4,10 +4,10 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.knarusawa.common.domain.flow.FlowId
 import com.knarusawa.common.domain.socialLoginState.SocialLoginStateRepository
 import com.knarusawa.common.domain.socialLoginState.State
+import com.knarusawa.common.util.logger
 import com.knarusawa.secure_stream.adapter.middleware.dto.SocialLoginAuthenticationToken
 import com.knarusawa.secure_stream.adapter.middleware.dto.WebauthnAssertionAuthenticationToken
 import com.knarusawa.secure_stream.application.service.completeWebauthnLogin.CompleteWebauthnLoginInputData
-import com.knarusawa.secure_stream.util.logger
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.AbstractAuthenticationToken

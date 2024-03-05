@@ -1,6 +1,6 @@
 package com.knarusawa.secure_stream.application.service.loginComplete
 
-import com.knarusawa.secure_stream.util.logger
+import com.knarusawa.common.util.logger
 import org.springframework.stereotype.Service
 
 @Service

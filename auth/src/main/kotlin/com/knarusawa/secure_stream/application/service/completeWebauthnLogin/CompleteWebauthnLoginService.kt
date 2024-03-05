@@ -4,8 +4,8 @@ import com.knarusawa.common.domain.flow.FlowId
 import com.knarusawa.common.domain.flow.FlowRepository
 import com.knarusawa.common.domain.user.UserId
 import com.knarusawa.common.domain.webauthn.WebauthnCredentialsRepository
+import com.knarusawa.common.util.logger
 import com.knarusawa.secure_stream.application.exception.UserNotFoundException
-import com.knarusawa.secure_stream.util.logger
 import com.webauthn4j.WebAuthnManager
 import com.webauthn4j.authenticator.AuthenticatorImpl
 import com.webauthn4j.converter.AttestedCredentialDataConverter

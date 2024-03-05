@@ -1,9 +1,9 @@
 package com.knarusawa.secure_stream.adapter.middleware
 
+import com.knarusawa.common.util.logger
 import com.knarusawa.secure_stream.application.service.loginComplete.LoginCompleteInputData
 import com.knarusawa.secure_stream.application.service.loginComplete.LoginCompleteService
 import com.knarusawa.secure_stream.domain.LoginUserDetails
-import com.knarusawa.secure_stream.util.logger
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders

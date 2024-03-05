@@ -1,8 +1,8 @@
 package com.knarusawa.secure_stream.adapter.middleware
 
 import com.knarusawa.common.domain.user.UserRepository
+import com.knarusawa.common.util.logger
 import com.knarusawa.secure_stream.domain.LoginUserDetails
-import com.knarusawa.secure_stream.util.logger
 import com.sun.jdi.request.InvalidRequestStateException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -31,13 +31,18 @@ class AuthorizeFilter(
         private val log = logger()
     }
 
-    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
+    ) {
         log.info("AuthorizeFilter")
         if (!combinedMatcher.matches(request)) {
             val user = request.session.getAttribute("user") as? LoginUserDetails
                 ?: throw InvalidRequestStateException("想定外の認証エラー")
 
-            SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(user, null, ArrayList())
+            SecurityContextHolder.getContext().authentication =
+                UsernamePasswordAuthenticationToken(user, null, ArrayList())
         }
 
         filterChain.doFilter(request, response)

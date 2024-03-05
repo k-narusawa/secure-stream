@@ -1,18 +1,18 @@
 package com.knarusawa.secure_stream.adapter.controller.response
 
-import com.knarusawa.secure_stream.util.logger
+import com.knarusawa.common.util.logger
 import org.springframework.boot.logging.LogLevel
 
 data class ErrorResponse(
 
-        val errorMessage: String
+    val errorMessage: String
 ) {
     private val log = logger()
 
     companion object {
         fun of(exception: Exception, errorMessage: String, logLevel: LogLevel) =
-                ErrorResponse(errorMessage = errorMessage)
-                        .also { it.log(exception, logLevel, errorMessage) }
+            ErrorResponse(errorMessage = errorMessage)
+                .also { it.log(exception, logLevel, errorMessage) }
     }
 
     private fun log(ex: Exception, logLevel: LogLevel, message: String) {
