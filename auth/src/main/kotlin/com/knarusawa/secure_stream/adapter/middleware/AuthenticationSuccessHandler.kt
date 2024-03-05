@@ -3,12 +3,14 @@ package com.knarusawa.secure_stream.adapter.middleware
 import com.knarusawa.common.util.logger
 import com.knarusawa.secure_stream.application.service.loginComplete.LoginCompleteInputData
 import com.knarusawa.secure_stream.application.service.loginComplete.LoginCompleteService
+import com.knarusawa.secure_stream.config.Environments
 import com.knarusawa.secure_stream.domain.LoginUserDetails
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
+import org.springframework.web.util.UriComponentsBuilder
 import sh.ory.hydra.api.OAuth2Api
 import sh.ory.hydra.model.AcceptOAuth2LoginRequest
 import java.time.LocalDateTime
@@ -17,6 +19,7 @@ import java.time.LocalDateTime
 @Component
 class AuthenticationSuccessHandler(
     private val loginCompleteService: LoginCompleteService,
+    private val environments: Environments,
     private val oAuth2Api: OAuth2Api,
 ) : org.springframework.security.web.authentication.AuthenticationSuccessHandler {
     companion object {
@@ -39,6 +42,15 @@ class AuthenticationSuccessHandler(
         log.info("login_challenge: $loginChallenge")
 
         if (loginChallenge != null) {
+            loginCompleteService.execute(
+                inputData = LoginCompleteInputData(
+                    username = user.username,
+                    remoteAddr = request?.remoteAddr ?: "",
+                    userAgent = request?.getHeader("User-Agent") ?: "",
+                    time = LocalDateTime.now()
+                )
+            )
+
             val req = AcceptOAuth2LoginRequest().subject(user.userId.value())
             val res = oAuth2Api.acceptOAuth2LoginRequest(loginChallenge, req)
 
@@ -55,15 +67,11 @@ class AuthenticationSuccessHandler(
             return
         }
 
-        loginCompleteService.execute(
-            inputData = LoginCompleteInputData(
-                username = user.username,
-                remoteAddr = request?.remoteAddr ?: "",
-                userAgent = request?.getHeader("User-Agent") ?: "",
-                time = LocalDateTime.now()
-            )
-        )
+        val errorPage = UriComponentsBuilder.fromUriString(environments.spFrontUrl)
+            .path("/error")
+            .build()
+            .toUriString()
 
-        response?.status = HttpServletResponse.SC_OK
+        response?.sendRedirect(errorPage)
     }
 }

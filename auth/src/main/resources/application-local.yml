@@ -29,3 +29,7 @@ env:
   hydra:
     admin:
       url: http://localhost:4445
+  auth-front:
+    url: http://localhost:3001
+  sp-front:
+    url: http://localhost:3000

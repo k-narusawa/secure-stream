@@ -10,4 +10,10 @@ class Environments {
 
     @Value("\${env.hydra.admin.url}")
     lateinit var hydraAdminUrl: String
+
+    @Value("\${env.auth-front.url}")
+    lateinit var authFrontUrl: String
+
+    @Value("\${env.sp-front.url}")
+    lateinit var spFrontUrl: String
 }
