@@ -12,7 +12,7 @@ import sh.ory.hydra.api.OAuth2Api
 @RestController
 @RequestMapping("/api/v1/logout")
 class LogoutController(
-    private val k: OAuth2Api
+    private val oauth2Api: OAuth2Api
 ) {
     @PostMapping
     fun apiV1LogoutPost(request: HttpServletRequest, response: HttpServletResponse) {
