@@ -24,6 +24,7 @@ env:
   webauthn:
     rp:
       id: localhost
-  url:
-    auth-front: http://localhost:3001
-    sp-front: http://localhost:3000
+  auth-front:
+    url: http://localhost:3001
+  sp-front:
+    url: http://localhost:3000

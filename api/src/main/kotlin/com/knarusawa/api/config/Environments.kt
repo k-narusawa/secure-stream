@@ -11,9 +11,9 @@ class Environments {
     @Value("\${env.webauthn.rp.id}")
     lateinit var rpId: String
 
-    @Value("\${env.url.auth-front}")
+    @Value("\${env.auth-front.url}")
     lateinit var authFrontUrl: String
 
-    @Value("\${env.url.sp-front}")
+    @Value("\${env.sp-front.url}")
     lateinit var spFrontUrl: String
 }

@@ -26,6 +26,7 @@ server:
 env:
   cors:
     allowed-origin: ${ALLOWED_ORIGIN}
-  url:
-    auth-front: ${SP_FRONT_URL}
-    sp-front: ${SP_FRONT_URL}
+  auth-front:
+    url: ${SP_FRONT_URL}
+  sp-front:
+    url: ${SP_FRONT_URL}
