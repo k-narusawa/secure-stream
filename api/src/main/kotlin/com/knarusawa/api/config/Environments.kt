@@ -16,4 +16,10 @@ class Environments {
 
     @Value("\${env.sp-front.url}")
     lateinit var spFrontUrl: String
+
+    @Value("\${spring.security.oauth2.resourceserver.opaque-token.client-id}")
+    lateinit var clientId: String
+
+    @Value("\${spring.security.oauth2.resourceserver.opaque-token.client-secret}")
+    lateinit var clientSecret: String
 }

@@ -24,6 +24,11 @@ env:
   webauthn:
     rp:
       id: localhost
+  hydra:
+    admin:
+      url: http://localhost:4445
+    public:
+      url: http://localhost:44444
   auth-front:
     url: http://localhost:3001
   sp-front:

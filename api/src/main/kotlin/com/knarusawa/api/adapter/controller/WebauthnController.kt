@@ -1,11 +1,8 @@
 package com.knarusawa.api.adapter.controller
 
 import com.knarusawa.api.adapter.exception.UnauthorizedException
-import com.knarusawa.api.application.service.connectSocialLogin.ConnectSocialLoginService
 import com.knarusawa.api.application.service.deleteWebauthn.DeleteWebauthnInputData
 import com.knarusawa.api.application.service.deleteWebauthn.DeleteWebauthnService
-import com.knarusawa.api.application.service.disconnectSocialLogin.DisconnectSocialLoginService
-import com.knarusawa.api.application.service.getSocialLoginUrls.GetSocialLoginUrlsService
 import com.knarusawa.api.application.service.registerWebauthn.RegisterWebauthnInputData
 import com.knarusawa.api.application.service.registerWebauthn.RegisterWebauthnService
 import com.knarusawa.api.application.service.requestWebauthn.RequestWebauthnInputData
@@ -27,9 +24,6 @@ class WebauthnController(
     private val requestWebauthnService: RequestWebauthnService,
     private val registerWebauthnService: RegisterWebauthnService,
     private val deleteWebauthnService: DeleteWebauthnService,
-    private val getSocialLoginUrlsService: GetSocialLoginUrlsService,
-    private val connectSocialLoginService: ConnectSocialLoginService,
-    private val disconnectSocialLoginService: DisconnectSocialLoginService,
 ) : WebauthnApi {
     companion object {
         private val log = logger()
