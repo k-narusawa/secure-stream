@@ -26,6 +26,7 @@ class AuthorizeFilter(
             AntPathRequestMatcher("/api/v1/login/webauthn/request"),
             AntPathRequestMatcher("/api/v1/login/social_login"),
             AntPathRequestMatcher("/api/v1/csrf"),
+            AntPathRequestMatcher("/api/v1/logout"),
         )
         private val combinedMatcher = OrRequestMatcher(matchers)
         private val log = logger()
