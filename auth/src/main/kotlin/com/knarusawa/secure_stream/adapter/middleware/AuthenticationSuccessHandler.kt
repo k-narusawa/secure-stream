@@ -51,8 +51,12 @@ class AuthenticationSuccessHandler(
                 )
             )
 
-            val req = AcceptOAuth2LoginRequest().subject(user.userId.value())
-            val res = oAuth2Api.acceptOAuth2LoginRequest(loginChallenge, req)
+            val req = AcceptOAuth2LoginRequest()
+                .subject(user.userId.value())
+                .remember(true)
+                .rememberFor(3600)
+            val res = oAuth2Api
+                .acceptOAuth2LoginRequest(loginChallenge, req)
 
             if (request.requestURI == "/api/v1/login/social_login") {
                 response?.sendRedirect(res.redirectTo)
