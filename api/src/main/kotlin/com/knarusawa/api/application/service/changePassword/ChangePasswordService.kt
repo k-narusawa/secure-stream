@@ -5,10 +5,12 @@ import com.knarusawa.common.domain.user.UserId
 import com.knarusawa.common.domain.user.UserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import sh.ory.hydra.api.OAuth2Api
 
 @Service
 class ChangePasswordService(
     private val userRepository: UserRepository,
+    private val oauthApi: OAuth2Api
 ) {
     @Transactional
     fun exec(inputData: ChangePasswordInputData) {
@@ -17,5 +19,7 @@ class ChangePasswordService(
 
         user.changePassword(inputData.password)
         userRepository.save(user)
+
+        oauthApi.revokeOAuth2ConsentSessions(inputData.userId, null, true)
     }
 }

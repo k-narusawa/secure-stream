@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -36,6 +37,11 @@ class SocialLoginController(
             SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
         val userId = principal?.getAttribute<String?>("sub")
             ?: throw UnauthorizedException()
+
+        val authentication =
+            SecurityContextHolder.getContext().authentication as? BearerTokenAuthentication
+        val token = authentication?.token?.tokenValue
+        println(token)
 
         val outputData =
             getSocialLoginUrlsService.exec(GetSocialLoginUrlsInputData(userId = userId))
