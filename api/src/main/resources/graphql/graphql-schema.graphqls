@@ -7,6 +7,12 @@ type UserInfo {
   user: User
   profile: Profile
   socialLogin: SocialLogin
+  passkey: [Passkey]
+}
+
+type Passkey{
+    credentialId: String!
+    aaguid: String!
 }
 
 type User{

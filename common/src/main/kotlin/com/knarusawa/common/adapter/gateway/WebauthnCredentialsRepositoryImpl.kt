@@ -32,4 +32,8 @@ class WebauthnCredentialsRepositoryImpl(
     override fun deleteByUserId(userId: UserId) {
         webAuthnCredentialsRecordDao.deleteByUserId(userId = userId.value())
     }
+
+    override fun deleteByCredentialId(credentialId: String) {
+        webAuthnCredentialsRecordDao.deleteByCredentialId(credentialId = credentialId)
+    }
 }

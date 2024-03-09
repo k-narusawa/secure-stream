@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -85,7 +86,7 @@ class WebauthnController(
     }
 
 
-    override fun registerWebauthn(registerWebauthnRequest: RegisterWebauthnRequest): ResponseEntity<Unit> {
+    override fun registerWebauthn(registerWebauthnRequest: RegisterWebauthnRequest): ResponseEntity<WebauthnRegistration> {
         val principal =
             SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
         val userId = principal?.getAttribute<String?>("sub")
@@ -100,11 +101,26 @@ class WebauthnController(
             attestationObject = registerWebauthnRequest.response.attestationObject ?: "",
             clientDataJSON = registerWebauthnRequest.response.clientDataJSON ?: "",
         )
-        registerWebauthnService.exec(inputData)
-        return ResponseEntity(HttpStatus.OK)
+        val outputData = registerWebauthnService.exec(inputData)
+
+        return ResponseEntity.ok(WebauthnRegistration(
+            credentialId = outputData.credentialId,
+            aaguid = outputData.aaguiid
+        ))
     }
 
-    override fun deleteWebauthn(): ResponseEntity<Unit> {
+    override fun deleteWebauthn(@PathVariable("credentialId") credentialId: String): ResponseEntity<Unit> {
+        val principal =
+            SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
+        val userId = principal?.getAttribute<String?>("sub")
+            ?: throw UnauthorizedException()
+
+        deleteWebauthnService.exec(inputData = DeleteWebauthnInputData(userId = UserId.from(userId), credentialId = credentialId))
+
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
+
+    override fun deleteAllWebauthn(): ResponseEntity<Unit> {
         val principal =
             SecurityContextHolder.getContext().authentication.principal as? OAuth2AuthenticatedPrincipal
         val userId = principal?.getAttribute<String?>("sub")

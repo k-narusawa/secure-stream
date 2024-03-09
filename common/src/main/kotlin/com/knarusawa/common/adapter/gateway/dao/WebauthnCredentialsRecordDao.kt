@@ -7,4 +7,5 @@ interface WebauthnCredentialsRecordDao : CrudRepository<WebauthnCredentialsRecor
     fun findByCredentialId(credentialId: String): WebauthnCredentialsRecord?
     fun findByUserId(userId: String): List<WebauthnCredentialsRecord>
     fun deleteByUserId(userId: String)
+    fun deleteByCredentialId(credentialId: String)
 }

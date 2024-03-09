@@ -25,7 +25,7 @@ class RegisterWebauthnService(
     private val environments: Environments
 ) {
     @Transactional
-    fun exec(inputData: RegisterWebauthnInputData) {
+    fun exec(inputData: RegisterWebauthnInputData): RegisterWebauthnOutputData {
         val origin = Origin.create("http://localhost:3000")
         val flow =
             flowRepository.findByFlowId(inputData.flowId)
@@ -84,5 +84,10 @@ class RegisterWebauthnService(
 
         webauthnCredentialsRepository.save(credentials)
         flowRepository.deleteByUserId(inputData.userId)
+
+        return RegisterWebauthnOutputData(
+            credentialId = credentialId.toString(),
+            aaguiid = registrationData.attestationObject!!.authenticatorData.attestedCredentialData!!.aaguid.value.toString()
+        )
     }
 }

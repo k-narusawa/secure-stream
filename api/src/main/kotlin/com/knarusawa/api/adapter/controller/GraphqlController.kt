@@ -1,9 +1,6 @@
 package com.knarusawa.api.adapter.controller
 
-import com.knarusawa.api.adapter.controller.dto.Profile
-import com.knarusawa.api.adapter.controller.dto.SocialLogin
-import com.knarusawa.api.adapter.controller.dto.User
-import com.knarusawa.api.adapter.controller.dto.UserInfo
+import com.knarusawa.api.adapter.controller.dto.*
 import com.knarusawa.api.adapter.exception.UnauthorizedException
 import com.knarusawa.api.application.service.changeProfile.ChangeProfileInputData
 import com.knarusawa.api.application.service.changeProfile.ChangeProfileService
@@ -12,6 +9,9 @@ import com.knarusawa.api.application.service.query.SocialLoginDtoQueryService
 import com.knarusawa.api.application.service.query.UserDtoQueryService
 import com.knarusawa.api.application.service.query.WebauthnCredentialsDtoQueryService
 import com.knarusawa.common.domain.user.UserId
+import com.webauthn4j.converter.AttestedCredentialDataConverter
+import com.webauthn4j.converter.util.ObjectConverter
+import com.webauthn4j.util.Base64UrlUtil
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
@@ -19,6 +19,7 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal
 import org.springframework.stereotype.Controller
+
 
 @Controller
 class GraphqlController(
@@ -78,6 +79,21 @@ class GraphqlController(
             google = socialLogin.google,
             github = socialLogin.github
         )
+    }
+
+
+    @SchemaMapping
+    fun passkey(userInfo: UserInfo): List<Passkey> {
+        val attestedCredentialDataConverter = AttestedCredentialDataConverter(ObjectConverter())
+
+        val webauthnCredentials =
+            webauthnCredentialsDtoQueryService.findByUserId(userId = UserId.from(userInfo.userId))
+        return webauthnCredentials.map {
+            Passkey(
+                credentialId = it.credentialId,
+                aaguid = attestedCredentialDataConverter.convert(Base64UrlUtil.decode(it.serializedAttestedCredentialData)).aaguid.value.toString()
+            )
+        }
     }
 
     @MutationMapping

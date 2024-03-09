@@ -10,6 +10,10 @@ class DeleteWebauthnService(
 ) {
     @Transactional
     fun exec(inputData: DeleteWebauthnInputData) {
-        webauthnCredentialsRepository.deleteByUserId(userId = inputData.userId)
+        if (inputData.credentialId.isNullOrEmpty()) {
+            webauthnCredentialsRepository.deleteByUserId(userId = inputData.userId)
+        } else {
+            webauthnCredentialsRepository.deleteByCredentialId(credentialId = inputData.credentialId)
+        }
     }
 }

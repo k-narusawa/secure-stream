@@ -7,4 +7,5 @@ interface WebauthnCredentialsRepository {
     fun findByCredentialId(credentialId: String): WebauthnCredentials?
     fun findByUserId(userId: String): List<WebauthnCredentials>
     fun deleteByUserId(userId: UserId)
+    fun deleteByCredentialId(credentialId: String)
 }
