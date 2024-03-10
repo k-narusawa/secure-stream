@@ -11,6 +11,12 @@ class Environments {
     @Value("\${env.hydra.admin.url}")
     lateinit var hydraAdminUrl: String
 
+    @Value("\${env.hydra.login.remember-for}")
+    lateinit var loginRememberFor: String
+
+    @Value("\${env.hydra.consent.remember-for}")
+    lateinit var consentRememberFor: String
+
     @Value("\${env.auth-front.url}")
     lateinit var authFrontUrl: String
 

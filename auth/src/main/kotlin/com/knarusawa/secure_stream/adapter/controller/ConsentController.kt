@@ -3,6 +3,7 @@ package com.knarusawa.secure_stream.adapter.controller
 import com.knarusawa.common.util.logger
 import com.knarusawa.secure_stream.adapter.controller.response.ApiV1ConsentGetResponse
 import com.knarusawa.secure_stream.adapter.controller.response.ApiV1ConsentPostResponse
+import com.knarusawa.secure_stream.config.Environments
 import org.springframework.security.web.csrf.CsrfToken
 import org.springframework.web.bind.annotation.*
 import sh.ory.hydra.api.OAuth2Api
@@ -12,6 +13,7 @@ import sh.ory.hydra.model.AcceptOAuth2ConsentRequest
 @RequestMapping("/api/v1/consent")
 class ConsentController(
     private val oAuth2Api: OAuth2Api,
+    private val environments: Environments
 ) {
     companion object {
         private val log = logger()
@@ -82,7 +84,7 @@ class ConsentController(
         val consentRequest = AcceptOAuth2ConsentRequest().apply {
             grantScope = scopes
             remember = true
-            rememberFor = 3600
+            rememberFor = environments.consentRememberFor.toLong()
         }
 
         val res = oAuth2Api.acceptOAuth2ConsentRequest(challenge, consentRequest)

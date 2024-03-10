@@ -9,6 +9,27 @@ spring:
   flyway:
     enabled: true
     locations: "classpath:db/migrate"
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+            scope: user:email
+            redirectUri: http://localhost:8081/api/v1/users/social_login/login/code/github
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            scope: https://www.googleapis.com/auth/userinfo.profile
+            redirectUri: http://localhost:8080/api/v1/login/social_login/google
+        provider:
+          github:
+            authorizationUri: https://github.com/login/oauth/authorize
+            tokenUri: https://github.com/login/oauth/access_token
+          google:
+            authorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+            tokenUri: https://www.googleapis.com/oauth2/v4/token
 
 server:
   servlet:
@@ -23,3 +44,7 @@ env:
   hydra:
     admin:
       url: ${HYDRA_ADMIN_CLIENT:http://localhost:4445}
+    login:
+      remember-for: 3600
+    consent:
+      remember-for: 0 # 0は無期限

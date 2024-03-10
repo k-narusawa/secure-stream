@@ -51,10 +51,12 @@ class AuthenticationSuccessHandler(
                 )
             )
 
-            val req = AcceptOAuth2LoginRequest()
-                .subject(user.userId.value())
-                .remember(true)
-                .rememberFor(3600)
+            val req = AcceptOAuth2LoginRequest().apply {
+                subject = user.userId.value()
+                remember = true
+                rememberFor = environments.loginRememberFor.toLong()
+            }
+
             val res = oAuth2Api
                 .acceptOAuth2LoginRequest(loginChallenge, req)
 
