@@ -33,12 +33,6 @@ spring:
             authorizationUri: https://accounts.google.com/o/oauth2/v2/auth
             tokenUri: https://www.googleapis.com/oauth2/v4/token
 
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
-
 server:
   port: 8081
 
