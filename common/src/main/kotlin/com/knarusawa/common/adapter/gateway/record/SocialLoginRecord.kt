@@ -1,19 +1,18 @@
 package com.knarusawa.common.adapter.gateway.record
 
 import com.knarusawa.common.domain.socialLogin.SocialLogin
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "social_login")
+@IdClass(value = SocialLoginKey::class)
 data class SocialLoginRecord(
     @Id
     @Column(name = "user_id")
     val userId: String = "",
 
+    @Id
     @Column(name = "provider")
     val provider: String = "",
 

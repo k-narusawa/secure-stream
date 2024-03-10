@@ -1,7 +1,8 @@
 package com.knarusawa.common.adapter.gateway.api
 
 import com.knarusawa.common.adapter.gateway.api.dto.GitHubAccessTokenResponse
-import org.springframework.http.MediaType.APPLICATION_JSON
+import com.knarusawa.common.adapter.gateway.api.dto.GoogleProfile
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
@@ -11,15 +12,19 @@ import reactor.util.retry.Retry
 import java.time.Duration
 
 @Component
-class GitHubWebClient {
+class GoogleApiClient(
+    private val loggingWebFilter: LoggingWebFilter
+) {
     companion object {
         private val client = WebClient.builder()
-            .baseUrl("https://github.com")
+            .baseUrl("https://www.googleapis.com")
             .codecs { codecs ->
                 codecs
                     .defaultCodecs()
                     .maxInMemorySize(500 * 1024)
             }
+            .filter(WebClientConfig().logRequest())
+            .filter(WebClientConfig().logResponse())
             .build()
     }
 
@@ -27,24 +32,38 @@ class GitHubWebClient {
         clientId: String,
         clientSecret: String,
         code: String,
-        redirectUri: String
+        redirectUri: String,
+        scope: String,
     ): GitHubAccessTokenResponse {
         val map: MultiValueMap<String, String> = LinkedMultiValueMap()
         map.add("client_id", clientId)
         map.add("client_secret", clientSecret)
         map.add("code", code)
         map.add("redirect_uri", redirectUri)
+        map.add("scope", scope)
         map.add("grant_type", "authorization_code")
 
         return client.post()
-            .uri("/login/oauth/access_token")
+            .uri("/oauth2/v4/token")
             .body(BodyInserters.fromFormData(map))
-            .accept(APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(GitHubAccessTokenResponse::class.java).log()
-            .checkpoint("チェックポイント", true)
+            .bodyToMono(GitHubAccessTokenResponse::class.java)
+            .retryWhen(Retry.fixedDelay(1, Duration.ofMillis(500)))
+            .block()
+            ?: throw RuntimeException("外部APIリクエスト時に失敗しました")
+    }
+
+    fun profile(accessToken: String): GoogleProfile {
+        return client.get()
+            .uri("/oauth2/v1/userinfo")
+            .header("Authorization", "Bearer $accessToken")
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .bodyToMono(GoogleProfile::class.java).log()
             .retryWhen(Retry.fixedDelay(3, Duration.ofMillis(500)))
             .block()
             ?: throw RuntimeException("外部APIリクエスト時に失敗しました")
+
     }
 }

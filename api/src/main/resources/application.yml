@@ -13,6 +13,25 @@ spring:
           introspection-uri: http://localhost:4445/admin/oauth2/introspect
           client-id: bd166c9a-a6ec-4e01-bcd6-f4a7e64a536f
           client-secret: tBW_irIBX7yOShRaheT7QYhweg
+      client:
+        registration:
+          github:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+            scope: user:email
+            redirectUri: ${GITHUB_REDIRECT_URL}
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            scope: https://www.googleapis.com/auth/userinfo.profile
+            redirectUri: ${GOOGLE_REDIRECT_URL}
+        provider:
+          github:
+            authorizationUri: https://github.com/login/oauth/authorize
+            tokenUri: https://github.com/login/oauth/access_token
+          google:
+            authorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+            tokenUri: https://www.googleapis.com/oauth2/v4/token
 
 logging:
   level:

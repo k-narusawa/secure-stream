@@ -18,15 +18,34 @@ class GetSocialLoginUrlsService(
     @Transactional
     fun exec(inputData: GetSocialLoginUrlsInputData): GetSocialLoginUrlsOutputData {
         val githubUrl = createGitHubAuthorizationUrl(userId = UserId.from(inputData.userId))
+        val googleUrl = createGoogleAuthorizationUrl(userId = UserId.from(inputData.userId))
 
         return GetSocialLoginUrlsOutputData(
             github = githubUrl,
-            google = ""
+            google = googleUrl
         )
     }
 
     private fun createGitHubAuthorizationUrl(userId: UserId): String {
         val client = clientRegistrationRepository.findByRegistrationId("github")
+
+        val socialLoginState = SocialLoginState.of(userId = userId)
+        socialLoginStateRepository.save(socialLoginState)
+
+        val authorizationRequest = OAuth2AuthorizationRequest.authorizationCode()
+            .clientId(client.clientId)
+            .authorizationUri(client.providerDetails.authorizationUri)
+            .redirectUri(client.redirectUri)
+            .scopes(client.scopes)
+            .state(socialLoginState.state.value)
+            .additionalParameters(Collections.emptyMap())
+            .build()
+
+        return authorizationRequest.authorizationRequestUri
+    }
+
+    private fun createGoogleAuthorizationUrl(userId: UserId): String {
+        val client = clientRegistrationRepository.findByRegistrationId("google")
 
         val socialLoginState = SocialLoginState.of(userId = userId)
         socialLoginStateRepository.save(socialLoginState)
