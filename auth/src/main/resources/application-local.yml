@@ -22,7 +22,7 @@ spring:
             clientId: ${GOOGLE_CLIENT_ID}
             clientSecret: ${GOOGLE_CLIENT_SECRET}
             scope: https://www.googleapis.com/auth/userinfo.profile
-            redirectUri: http://localhost:8081/api/v1/users/social_login/login/code/google
+            redirectUri: http://localhost:8080/api/v1/login/social_login/google
         provider:
           github:
             authorizationUri: https://github.com/login/oauth/authorize

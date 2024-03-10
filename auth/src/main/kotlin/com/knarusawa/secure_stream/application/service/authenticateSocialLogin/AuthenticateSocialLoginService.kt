@@ -37,7 +37,7 @@ class AuthenticateSocialLoginService(
             clientId = client.clientId,
             clientSecret = client.clientSecret,
             code = code,
-            redirectUri = "http://localhost:8080"
+            redirectUri = client.redirectUri
         )
 
         val githubUser = gitHubApiWebClient.user(res.accessToken)
@@ -58,7 +58,7 @@ class AuthenticateSocialLoginService(
             clientId = client.clientId,
             clientSecret = client.clientSecret,
             code = code,
-            redirectUri = "http://localhost:8081/api/v1/users/social_login/login/code/google",
+            redirectUri = client.redirectUri,
             scope = client.scopes.first()
         )
 

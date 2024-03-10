@@ -55,6 +55,7 @@ class SecurityConfig {
                 "/api/v1/login/webauthn",
                 "/api/v1/login/webauthn/request",
                 "/api/v1/login/social_login",
+                "/api/v1/login/social_login/google",
                 "/api/v1/logout",
             ).permitAll()
             it.anyRequest().authenticated()
@@ -69,8 +70,9 @@ class SecurityConfig {
         val filter = AuthenticationFilter(authenticationManager(), socialLoginStateRepository)
         filter.setRequiresAuthenticationRequestMatcher {
             (it.method == "POST" && it.requestURI == "/api/v1/login") or
-                    (it.method == "POST" && it.requestURI == "/api/v1/login/webauthn") or
-                    (it.method == "GET" && it.requestURI == "/api/v1/login/social_login")
+                (it.method == "POST" && it.requestURI == "/api/v1/login/webauthn") or
+                (it.method == "GET" && it.requestURI == "/api/v1/login/social_login") or
+                (it.method == "GET" && it.requestURI == "/api/v1/login/social_login/google")
         }
         filter.setAuthenticationManager(authenticationManager())
         filter.setAuthenticationSuccessHandler(authenticationSuccessHandler)

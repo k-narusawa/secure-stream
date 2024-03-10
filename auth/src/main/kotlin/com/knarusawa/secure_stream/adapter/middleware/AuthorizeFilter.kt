@@ -25,6 +25,7 @@ class AuthorizeFilter(
             AntPathRequestMatcher("/api/v1/login/webauthn"),
             AntPathRequestMatcher("/api/v1/login/webauthn/request"),
             AntPathRequestMatcher("/api/v1/login/social_login"),
+            AntPathRequestMatcher("/api/v1/login/social_login/google"),
             AntPathRequestMatcher("/api/v1/csrf"),
             AntPathRequestMatcher("/api/v1/logout"),
         )

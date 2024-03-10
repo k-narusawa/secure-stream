@@ -58,7 +58,7 @@ class AuthenticationSuccessHandler(
             val res = oAuth2Api
                 .acceptOAuth2LoginRequest(loginChallenge, req)
 
-            if (request.requestURI == "/api/v1/login/social_login") {
+            if (request.requestURI.startsWith("/api/v1/login/social_login")) {
                 response?.sendRedirect(res.redirectTo)
                 return
             }
