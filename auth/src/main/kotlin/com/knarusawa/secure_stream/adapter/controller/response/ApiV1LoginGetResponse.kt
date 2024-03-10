@@ -7,6 +7,8 @@ data class ApiV1LoginGetResponse(
     val csrfToken: String,
     @JsonProperty("redirect_to")
     val redirectTo: String?,
+    @JsonProperty("google_login_url")
+    val googleLoginUrl: String?,
     @JsonProperty("github_login_url")
     val githubLoginUrl: String?,
 )

@@ -18,10 +18,18 @@ spring:
             clientSecret: ${GITHUB_CLIENT_SECRET}
             scope: user:email
             redirectUri: http://localhost:8081/api/v1/users/social_login/login/code/github
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            scope: https://www.googleapis.com/auth/userinfo.profile
+            redirectUri: http://localhost:8081/api/v1/users/social_login/login/code/google
         provider:
           github:
             authorizationUri: https://github.com/login/oauth/authorize
             tokenUri: https://github.com/login/oauth/access_token
+          google:
+            authorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+            tokenUri: https://www.googleapis.com/oauth2/v4/token
 
 env:
   cors:

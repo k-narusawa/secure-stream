@@ -32,6 +32,7 @@ class LoginController(
         return ApiV1LoginGetResponse(
             csrfToken = csrfToken.token.toString(),
             redirectTo = null,
+            googleLoginUrl = outputData.googleUrl,
             githubLoginUrl = outputData.githubUrl,
         )
 

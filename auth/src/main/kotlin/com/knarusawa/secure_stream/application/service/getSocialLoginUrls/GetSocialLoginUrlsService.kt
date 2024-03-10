@@ -18,7 +18,7 @@ class GetSocialLoginUrlsService(
     fun exec(inputData: GetSocialLoginUrlsInputData): GetSocialLoginUrlsOutputData {
         return GetSocialLoginUrlsOutputData(
             githubUrl = generateGitHubUrl(inputData.loginChallenge),
-            googleUrl = generateGitHubUrl(inputData.loginChallenge),
+            googleUrl = generateGoogleUrl(inputData.loginChallenge),
         )
     }
 
@@ -32,6 +32,23 @@ class GetSocialLoginUrlsService(
             .authorizationUri(githubClient.providerDetails.authorizationUri)
             .redirectUri(githubClient.redirectUri)
             .scopes(githubClient.scopes)
+            .state(socialLoginState.state.value)
+            .additionalParameters(Collections.emptyMap())
+            .build()
+
+        return authorizationRequest.authorizationRequestUri
+    }
+
+    private fun generateGoogleUrl(loginChallenge: String): String {
+        val googleClient = clientRegistrationRepository.findByRegistrationId("google")
+        val socialLoginState = SocialLoginState.of(challenge = loginChallenge)
+        socialLoginStateRepository.save(socialLoginState)
+
+        val authorizationRequest = OAuth2AuthorizationRequest.authorizationCode()
+            .clientId(googleClient.clientId)
+            .authorizationUri(googleClient.providerDetails.authorizationUri)
+            .redirectUri(googleClient.redirectUri)
+            .scopes(googleClient.scopes)
             .state(socialLoginState.state.value)
             .additionalParameters(Collections.emptyMap())
             .build()
